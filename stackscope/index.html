@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StackScope Case Study  -  High-Performance C0 Bytecode VM & Interactive Systems Visualizer</title>
+  <meta name="description" content="Technical deep-dive into StackScope: an ANSI C99 stack-based bytecode virtual machine delivering ~525 MIPS with 45-opcode ISA, 56-byte activation records, and setjmp/longjmp fault envelopes.">
+  <link rel="canonical" href="https://dhruvkithany.github.io/stackscope/">
+
+  <meta property="og:title" content="StackScope Case Study  -  Dhruv Kithany">
+  <meta property="og:description" content="Pure ANSI C99 bytecode virtual machine delivering ~525 MIPS, 3.58x optimization speedup, 96.4% line coverage, and zero unhandled segmentation faults.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://dhruvkithany.github.io/stackscope/">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css?v=7.0">
+</head>
+<body class="siris-body">
+  <div class="reading-progress-bar" id="reading-progress" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="nav-container">
+      <a href="index.html" class="site-logo">
+        dhruv_kithany <span>/</span> stackscope
+      </a>
+
+      <nav class="nav-links">
+        <a href="../index.html#experience" class="nav-link">Experience</a>
+        <a href="../index.html#research" class="nav-link">Research</a>
+        <a href="../index.html#projects" class="nav-link">Projects</a>
+        <a href="../writing.html" class="nav-link">Writing</a>
+        <a href="../experience.html" target="_blank" class="nav-resume">Resume (PDF) ↗</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- Hero Section -->
+    <section class="siris-hero">
+      <div class="container">
+        <div class="siris-back-link">
+          <a href="../index.html#projects" class="back-link">
+            <span aria-hidden="true">&larr;</span>
+            <span>Back to All Projects</span>
+          </a>
+        </div>
+
+        <div class="siris-hero-content">
+          <div class="siris-meta-pill">
+            <span class="mono-label">SYSTEMS ARCHITECTURE // ANSI C99 // BYTECODE RUNTIME</span>
+          </div>
+          <h1 class="siris-hero-title">
+            StackScope: High-Performance C0 Bytecode VM &amp; Systems Visualizer
+          </h1>
+          <p class="siris-hero-subtitle">
+            A high-performance stack-based virtual machine in pure ANSI C99 delivering ~525 MIPS with complete 45-opcode JVM-style ISA coverage, 56-byte activation call frames, bounds-checked heap memory, 12 classes of <code>setjmp/longjmp</code> runtime fault traps, and an interactive time-travel execution inspector.
+          </p>
+          <div class="project-links" style="margin-top:var(--space-3);">
+            <a href="https://dhruvkithany.github.io/StackScope/?program=factorial&step=1" target="_blank" rel="noopener noreferrer" class="btn-primary">
+              <span>Launch Live Systems Visualizer</span> <span aria-hidden="true">↗</span>
+            </a>
+            <a href="https://github.com/DhruvKithany/StackScope" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+              <span>GitHub Repository</span> <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 4 Key Quantified Metrics -->
+        <div class="siris-stats" style="margin-top: var(--space-8);">
+          <div class="stat-card">
+            <span class="stat-value">~525.3</span>
+            <span class="stat-label">MIPS Instruction Rate</span>
+            <span class="stat-sub">15,000,011 ops in 28.55ms</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">3.58x</span>
+            <span class="stat-label">Optimization Speedup</span>
+            <span class="stat-sub">+72.1% faster (-O0 to -O2)</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">56 B</span>
+            <span class="stat-label">Frame Activation Record</span>
+            <span class="stat-sub">1,000 frames consume ~56 KB</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">96.4%</span>
+            <span class="stat-label">Runtime Line Coverage</span>
+            <span class="stat-sub">48 / 48 test suites passing</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 1: Executive Summary & Motivation -->
+    <section class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">01 // MOTIVATION</span>
+            <h2 class="section-title">Design Target</h2>
+            <p class="rail-desc">Why stack-based bytecode architectures matter for portable, memory-safe execution.</p>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <p style="font-size: var(--text-md); color: var(--text-primary); line-height: 1.7;">
+            The C0 language - a strongly-typed, memory-safe C derivative developed at Carnegie Mellon University - bridges the expressive power of systems programming with the safety guarantees of runtime bounds validation and automatic garbage collection.
+          </p>
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            The objective of <strong>StackScope</strong> was to construct a production-grade execution runtime from first principles in ANSI C99: a bytecode loader, an efficient fetch-decode-execute dispatch engine, structured activation call records, manual memory management with bounds checking on dynamic allocations, and deterministic trap recovery - all while maintaining an executable footprint under 100 KB and achieving over 500 million instructions per second.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Memory Model & Struct Schemas -->
+    <section class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">02 // MEMORY MODEL</span>
+            <h2 class="section-title">Memory Layout</h2>
+            <p class="rail-desc">Zero padding bloat and explicit bounds validation on all dynamic allocations.</p>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            Every internal data structure is optimized for cache alignment and minimal memory overhead:
+          </p>
+
+          <div class="tech-code-box">
+<pre>/* 1. Value Container: 16 bytes */
+typedef struct {
+    c0_type type;       /* 4 bytes (enum: C0_INT or C0_PTR) */
+    /* 4 bytes implicit alignment padding */
+    union {
+        int32_t i;      /* 4 bytes signed integer */
+        void   *p;      /* 8 bytes 64-bit generic pointer */
+    } val;              /* 8 bytes */
+} c0_value;             /* Total: 16 bytes */
+
+/* 2. Activation Record: 56 bytes per call frame */
+typedef struct frame_s {
+    const uint8_t *P;   /* 8 bytes: Bytecode array pointer */
+    size_t         pc;  /* 8 bytes: 16-bit Program counter */
+    c0_value      *V;   /* 8 bytes: Local variables array */
+    c0_value      *S;   /* 8 bytes: Operand evaluation stack */
+    size_t         sp;  /* 8 bytes: Stack pointer index */
+    size_t num_vars;    /* 8 bytes: Allocated local variable slots */
+    size_t code_len;    /* 8 bytes: Bytecode length boundary */
+} frame;                /* Total: 56 bytes */
+
+/* 3. Dynamic Array Header: 16 bytes */
+typedef struct {
+    int   count;        /* 4 bytes: Number of elements */
+    int   elt_size;     /* 4 bytes: Size in bytes per element */
+    void *data;         /* 8 bytes: Pointer to heap payload */
+} c0_array;             /* Total: 16 bytes */</pre>
+          </div>
+
+          <div class="point-card">
+            <span class="point-title">Memory Safety Invariants</span>
+            <p class="point-desc">
+              <strong>1. Stack-Allocation Overhead:</strong> An execution call stack depth of 1,000 recursive invocations consumes only ~56 KB of activation record metadata.<br>
+              <strong>2. Dynamic Heap Safety:</strong> Arrays store metadata explicitly (<code>c0_array</code>). Every index access checks <code>0 &le; i &lt; count</code>. Out-of-bounds accesses trigger an immediate graceful trap via <code>setjmp/longjmp</code>, guaranteeing 0 unhandled segmentation faults.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Microbenchmarks & Empirical Performance -->
+    <section class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">03 // BENCHMARKS</span>
+            <h2 class="section-title">Microbenchmarks</h2>
+            <p class="rail-desc">Empirical throughput measured across diverse computational profiles.</p>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            Evaluated on an Intel Core i7-12700H (2.30 GHz) running 64-bit Windows 11 with MinGW GCC, median of 15 runs per test:
+          </p>
+
+          <div class="bench-table-wrap">
+            <table class="bench-table">
+              <thead>
+                <tr>
+                  <th>Workload</th>
+                  <th>Algorithmic Nature</th>
+                  <th>Bytecode Cycles</th>
+                  <th>Median Time</th>
+                  <th>Execution Rate</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Arithmetic Loop (1M iters)</strong></td>
+                  <td>ALU / Branching / Locals</td>
+                  <td>15,000,011</td>
+                  <td>28.55 ms</td>
+                  <td class="highlight">525.3 MIPS</td>
+                  <td>PASS (0)</td>
+                </tr>
+                <tr>
+                  <td><strong>Recursive Factorial (12!)</strong></td>
+                  <td>Deep Frame Recursion &amp; Unwinding</td>
+                  <td>1,134</td>
+                  <td>5.99 ms</td>
+                  <td>189.3 KIPS</td>
+                  <td>PASS (0)</td>
+                </tr>
+                <tr>
+                  <td><strong>Iterative Fibonacci (N=20)</strong></td>
+                  <td>Loop Invariants &amp; Stack Ops</td>
+                  <td>10,000</td>
+                  <td>6.26 ms</td>
+                  <td>1.60 MIPS</td>
+                  <td>PASS (0)</td>
+                </tr>
+                <tr>
+                  <td><strong>Prime Sieve (&le; 50)</strong></td>
+                  <td>Modulo Arithmetic &amp; Nested Branches</td>
+                  <td>3,223</td>
+                  <td>5.16 ms</td>
+                  <td>624.6 KIPS</td>
+                  <td>PASS (0)</td>
+                </tr>
+                <tr>
+                  <td><strong>Collatz Table (N=1..20)</strong></td>
+                  <td>Multi-sequence Stopping-Times + I/O</td>
+                  <td>5,578</td>
+                  <td>5.46 ms</td>
+                  <td>1.02 MIPS</td>
+                  <td>PASS (0)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="point-title" style="margin-top:var(--space-2);">Optimization Speedup: Baseline (-O0) vs. Optimized (-O2)</h3>
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.6;">
+            On compute-intensive arithmetic loops, compiler optimizations in the dispatch loop reduced execution duration from <strong>103.74 ms</strong> down to <strong>28.96 ms</strong>, representing a <strong>3.58x speedup (+72.1% faster)</strong>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Dispatch Architecture (Switch vs Computed Goto) -->
+    <section class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">04 // DISPATCH</span>
+            <h2 class="section-title">Dispatch Tradeoffs</h2>
+            <p class="rail-desc">Empirical comparison: Standard C switch vs. GCC computed-goto threaded dispatch.</p>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            The runtime implements dual dispatch strategies toggled via <code>-DUSE_COMPUTED_GOTO</code>: standard C switch table vs. GCC <code>&&label</code> direct threaded dispatch.
+          </p>
+
+          <div class="bench-table-wrap">
+            <table class="bench-table">
+              <thead>
+                <tr>
+                  <th>Workload</th>
+                  <th>Switch Dispatch</th>
+                  <th>Computed-Goto</th>
+                  <th>Switch MIPS</th>
+                  <th>Goto MIPS</th>
+                  <th>Delta</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Arithmetic Loop (1M)</strong></td>
+                  <td>26.94 ms</td>
+                  <td>35.40 ms</td>
+                  <td class="highlight">556.8 MIPS</td>
+                  <td>423.7 MIPS</td>
+                  <td class="highlight">Switch +31.4% faster</td>
+                </tr>
+                <tr>
+                  <td><strong>Collatz Table (1..20)</strong></td>
+                  <td>5.02 ms</td>
+                  <td>4.80 ms</td>
+                  <td>1.11 MIPS</td>
+                  <td class="highlight">1.16 MIPS</td>
+                  <td>Computed-Goto +4.6% faster</td>
+                </tr>
+                <tr>
+                  <td><strong>Prime Sieve (&le; 50)</strong></td>
+                  <td>4.94 ms</td>
+                  <td>4.77 ms</td>
+                  <td>652.4 KIPS</td>
+                  <td class="highlight">675.7 KIPS</td>
+                  <td>Computed-Goto +3.6% faster</td>
+                </tr>
+                <tr>
+                  <td><strong>Recursive Factorial (12!)</strong></td>
+                  <td>5.20 ms</td>
+                  <td>5.09 ms</td>
+                  <td>218.1 KIPS</td>
+                  <td class="highlight">222.8 KIPS</td>
+                  <td>Computed-Goto +2.2% faster</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <blockquote style="border-left: 2px solid var(--accent); padding-left: var(--space-4); font-size: var(--text-sm); color: var(--text-primary); line-height: 1.6;">
+            <strong>Architectural Insight:</strong> On x86-64 with deep branch prediction pipelines (BHT/BTB), a dense switch jump table localized in the L1 instruction cache outperforms threaded dispatch on tight loops with low instruction diversity. On irregular, branch-heavy workloads with higher instruction diversity (Collatz, primes), computed-goto's dedicated indirect jump site per opcode reduces BTB pollution and provides a 2 - 5% speedup.
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Fault Recovery & Traps -->
+    <section class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">05 // RESILIENCE</span>
+            <h2 class="section-title">Fault Traps</h2>
+            <p class="rail-desc">12 distinct runtime error classes caught gracefully with zero unhandled segmentation faults.</p>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            In classical C interpreters, invalid memory dereferences or arithmetic overflows cause fatal segmentation faults that crash the entire host process. StackScope wraps the VM dispatch loop in a <code>setjmp/longjmp</code> fault envelope (defined in <code>include/c0vm_abort.h</code>):
+          </p>
+
+          <div class="tech-code-box">
+<pre>#define c0_abort(msg) do { \
+    c0vm_last_error = (msg); \
+    longjmp(c0vm_abort_env, 1); \
+} while(0)</pre>
+          </div>
+
+          <div class="point-card">
+            <span class="point-title">12 Architectural Trap Classes Handled:</span>
+            <p class="point-desc">
+              1. Division by zero (<code>IDIV</code>, <code>IREM</code>)<br>
+              2. Two's-complement arithmetic overflow (<code>INT_MIN / -1</code>)<br>
+              3. Array index out of bounds ($i < 0$ or $i \ge \text{count}$)<br>
+              4. Array allocation with negative length ($n < 0$)<br>
+              5. Null pointer dereferences on structs and arrays<br>
+              6. Call stack overflow on unbounded recursion<br>
+              7. Shift count out of bounds ($k < 0$ or $k \ge 32$)<br>
+              8. Invalid opcode in bytecode stream<br>
+              9. Truncated bytecode buffer read<br>
+              10. Native function dispatch index out of bounds<br>
+              11. Operand stack underflow on binary operations<br>
+              12. Memory allocation failure on heap exhaustion
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: Interactive Systems Visualizer -->
+    <section class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">06 // TOOLING</span>
+            <h2 class="section-title">Systems Visualizer</h2>
+            <p class="rail-desc">Zero-dependency client-side time-travel debugger with O(1) step latency.</p>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            To accompany the ANSI C99 runtime, I developed an interactive web-based execution visualizer hosted on GitHub Pages. The visualizer parses pre-compiled execution telemetry traces and provides sub-5ms stepping across up to 10,000 cycles without external frameworks.
+          </p>
+
+          <div style="padding-top: var(--space-4); border-top: 1px solid var(--border-hairline); display:flex; align-items:center; gap:var(--space-4); flex-wrap:wrap;">
+            <a href="https://dhruvkithany.github.io/StackScope/?program=factorial&step=1" target="_blank" rel="noopener noreferrer" class="btn-primary">
+              <span>Open Live Systems Visualizer</span>
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+            <a href="../index.html#projects" class="btn-secondary">
+              <span>Back to Portfolio</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>Dhruv Kithany · B.S. May 2028 · University of Wisconsin-Madison</div>
+      <div class="footer-links">
+        <a href="mailto:kithany@wisc.edu" class="footer-link">kithany@wisc.edu</a>
+        <a href="https://github.com/dhruvkithany" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub ↗</a>
+        <a href="https://linkedin.com/in/dhruvkithany" target="_blank" rel="noopener noreferrer" class="footer-link">LinkedIn ↗</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js?v=7.0"></script>
+</body>
+</html>
