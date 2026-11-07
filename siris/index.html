@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIRIS Case Study  -  Production Multi-Agent RAG | Dhruv Kithany</title>
+  <meta name="description" content="Deep-dive engineering case study on SIRIS: a production multi-agent RAG system built on Copilot Studio, Azure OpenAI (GPT-5.5), and Entra ID for enterprise architecture governance.">
+  <link rel="canonical" href="https://dhruvkithany.github.io/siris/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="SIRIS: Production Multi-Agent RAG Case Study  -  Dhruv Kithany">
+  <meta property="og:description" content="Architecture, 6 engineering tradeoffs, 165+ evaluation cases, and production lessons from deploying an 8-agent RAG assistant company-wide.">
+  <meta property="og:url" content="https://dhruvkithany.github.io/siris/">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22%2307080A%22 stroke=%22%23F59E0B%22 stroke-width=%228%22/><text y=%2258%22 x=%2250%22 text-anchor=%22middle%22 font-family=%22monospace%22 font-weight=%22700%22 font-size=%2246%22 fill=%22%23F59E0B%22>S</text></svg>">
+
+  <link rel="stylesheet" href="../assets/css/style.css?v=7.0">
+</head>
+<body>
+  <div id="reading-progress" class="reading-progress-bar" aria-hidden="true"></div>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="nav-container">
+      <a href="index.html" class="site-logo">
+        dhruv_kithany <span>/</span> siris
+      </a>
+
+      <nav class="nav-links">
+        <a href="../index.html#experience" class="nav-link">Experience</a>
+        <a href="../index.html#research" class="nav-link">Research</a>
+        <a href="../index.html#projects" class="nav-link">Projects</a>
+        <a href="../writing.html" class="nav-link">Writing</a>
+        <a href="../experience.html" target="_blank" class="nav-resume">Resume (PDF) ↗</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- Title Block -->
+    <article class="case-study-hero">
+      <div class="container">
+        <div style="display:flex; flex-direction:column; gap:var(--space-3); max-width:840px;">
+          <div class="tag-row">
+            <span class="tag tag-accent">SYSTEM CASE STUDY</span>
+            <span class="tag">PUBLISHED COMPANY-WIDE</span>
+            <span class="tag">ENTERPRISE ARCHITECTURE</span>
+          </div>
+          <h1 class="siris-title" style="font-size: clamp(2rem, 1.8rem + 1.5vw, 3rem);">
+            SIRIS: Structured Intelligent Routing & Information System
+          </h1>
+          <p class="siris-oneliner">
+            A production, retrieval-augmented, multi-agent enterprise assistant giving one natural-language entry point to distributed architecture governance knowledge. Published company-wide across Federated Hermes.
+          </p>
+
+          <!-- Metadata Spec Grid -->
+          <div class="case-study-meta-grid">
+            <div class="spec-item">
+              <span class="spec-k">Role</span>
+              <span class="spec-v">Sole Architect & Developer</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-k">Timeline</span>
+              <span class="spec-v">May  -  Aug 2026</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-k">Stack</span>
+              <span class="spec-v">Copilot Studio · Azure OpenAI (GPT-5.5) · Entra ID</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-k">Verification</span>
+              <span class="spec-v">165+ Rubric Cases · 6/6 Specialists Verified</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Problem Statement -->
+    <section id="problem" class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">01 // CONTEXT</span>
+            <h2 class="section-title">The Problem</h2>
+          </div>
+        </aside>
+        <div class="content-right" style="max-width: var(--max-w-prose);">
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            Sitting in weekly Architecture Review Board meetings, specific technical questions kept stalling high-level discussions because architects and engineers didn't know which library owned the authoritative answer.
+          </p>
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            Governance knowledge was fragmented across six distinct SharePoint libraries - Standards, Principles, Exceptions, Permits to Build (PtBs), Roadmaps, and Production Position Documents (PPDs). Each had its own owners, taxonomy, and dense institutional vocabulary.
+          </p>
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            Finding a definitive answer meant knowing which repository owned it, locating the file, and cross-referencing multiple documents by hand. This reliance on scarce subject-matter experts introduced significant drag - and created a real risk that teams might skip required governance checks because the manual lookup path was too costly. The goal was simple: surface the authoritative source in seconds with complete verification.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture & Diagram -->
+    <section id="architecture" class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">02 // ARCHITECTURE</span>
+            <h2 class="section-title">Multi-Agent Topology</h2>
+          </div>
+        </aside>
+        <div class="content-right">
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7; max-width: var(--max-w-prose);">
+            SIRIS uses a two-level hub-and-spoke multi-agent topology. One ARB router receives the user’s query, analyzes intent, and delegates directly to one of six specialist agents. An eighth agent extends this exact pattern to Compliance as a proof of concept.
+          </p>
+
+          <!-- Master Architecture SVG -->
+          <div class="arch-diagram-container">
+            <svg class="arch-svg" viewBox="0 0 760 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Security Boundary -->
+              <rect x="15" y="15" width="730" height="330" rx="8" stroke="#1B1E24" fill="#0D0F13" />
+              <text x="35" y="42" fill="#F59E0B" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600">ENTRA ID SECURITY LAYER  -  USER IDENTITY SCOPING (0 STANDING AI PRIVILEGES)</text>
+
+              <!-- Router -->
+              <rect x="250" y="65" width="260" height="60" rx="4" fill="#12151B" stroke="#F59E0B" stroke-width="1.5" />
+              <text x="380" y="90" fill="#E8E9EC" font-family="'Geist', sans-serif" font-size="14" font-weight="600" text-anchor="middle">ARB Routing Agent (Hub)</text>
+              <text x="380" y="108" fill="#7C828D" font-family="'JetBrains Mono', monospace" font-size="10" text-anchor="middle">Generative Intent Parser · Zero Knowledge Sources</text>
+
+              <!-- Connection Lines with Interactive Beam Lighting -->
+              <path d="M 380 125 L 90 185" class="arch-link arch-link-standards" stroke="#252B35" stroke-width="1.2" />
+              <path d="M 380 125 L 205 185" class="arch-link arch-link-principles" stroke="#252B35" stroke-width="1.2" />
+              <path d="M 380 125 L 320 185" class="arch-link arch-link-exceptions" stroke="#252B35" stroke-width="1.2" />
+              <path d="M 380 125 L 440 185" class="arch-link arch-link-ptbs" stroke="#252B35" stroke-width="1.2" />
+              <path d="M 380 125 L 555 185" class="arch-link arch-link-roadmaps" stroke="#252B35" stroke-width="1.2" />
+              <path d="M 380 125 L 670 185" class="arch-link arch-link-ppds" stroke="#252B35" stroke-width="1.2" />
+
+              <!-- 6 Specialists with Interactive Hover & Beam Illumination -->
+              <g class="arch-agent-node" data-agent="standards" tabindex="0" role="button" aria-label="Specialist: ARB Standards" transform="translate(35, 185)">
+                <rect width="105" height="60" rx="4" fill="#07080A" stroke="#1B1E24" />
+                <text x="52" y="24" fill="#E8E9EC" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" text-anchor="middle">ARB-Standards</text>
+                <text x="52" y="44" fill="#7C828D" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">Mandatory Rules</text>
+              </g>
+
+              <g class="arch-agent-node" data-agent="principles" tabindex="0" role="button" aria-label="Specialist: ARB Principles" transform="translate(150, 185)">
+                <rect width="105" height="60" rx="4" fill="#07080A" stroke="#1B1E24" />
+                <text x="52" y="24" fill="#E8E9EC" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" text-anchor="middle">ARB-Principles</text>
+                <text x="52" y="44" fill="#7C828D" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">Guiding Direction</text>
+              </g>
+
+              <g class="arch-agent-node" data-agent="exceptions" tabindex="0" role="button" aria-label="Specialist: ARB Exceptions" transform="translate(265, 185)">
+                <rect width="105" height="60" rx="4" fill="#07080A" stroke="#1B1E24" />
+                <text x="52" y="24" fill="#E8E9EC" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" text-anchor="middle">ARB-Exceptions</text>
+                <text x="52" y="44" fill="#7C828D" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">Waivers & Expiry</text>
+              </g>
+
+              <g class="arch-agent-node" data-agent="ptbs" tabindex="0" role="button" aria-label="Specialist: ARB PtBs" transform="translate(380, 185)">
+                <rect width="105" height="60" rx="4" fill="#07080A" stroke="#1B1E24" />
+                <text x="52" y="24" fill="#E8E9EC" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" text-anchor="middle">ARB-PtBs</text>
+                <text x="52" y="44" fill="#7C828D" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">Permit to Build</text>
+              </g>
+
+              <g class="arch-agent-node" data-agent="roadmaps" tabindex="0" role="button" aria-label="Specialist: ARB Roadmaps" transform="translate(495, 185)">
+                <rect width="105" height="60" rx="4" fill="#07080A" stroke="#1B1E24" />
+                <text x="52" y="24" fill="#E8E9EC" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" text-anchor="middle">ARB-Roadmaps</text>
+                <text x="52" y="44" fill="#7C828D" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">Sunset Timelines</text>
+              </g>
+
+              <g class="arch-agent-node" data-agent="ppds" tabindex="0" role="button" aria-label="Specialist: ARB PPDs" transform="translate(610, 185)">
+                <rect width="115" height="60" rx="4" fill="#07080A" stroke="#1B1E24" />
+                <text x="57" y="24" fill="#E8E9EC" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" text-anchor="middle">ARB-PPDs</text>
+                <text x="57" y="44" fill="#7C828D" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">Position Matrix</text>
+              </g>
+
+              <!-- Storage Grounding -->
+              <rect x="35" y="270" width="690" height="48" rx="4" fill="#12151B" stroke="#1B1E24" />
+              <text x="380" y="294" fill="#F59E0B" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600" text-anchor="middle">DEDICATED SHAREPOINT REPOSITORIES (NO BLENDED INDEX)</text>
+              <text x="380" y="308" fill="#7C828D" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">Approved Standards · Principles · Exceptions · PtBs · Roadmaps · PPD Library</text>
+            </svg>
+            <div class="diagram-caption">
+              <span>Figure 2: Complete SIRIS Hub & Specialist Architecture</span>
+              <span>1 Router + 6 Specialists · Entra ID-Scoped</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 Engineering Decisions & Tradeoffs -->
+    <section id="tradeoffs" class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">03 // DECISIONS</span>
+            <h2 class="section-title">Engineering Tradeoffs</h2>
+            <p class="rail-desc">
+              Six critical production challenges, root causes, and architectural fixes.
+            </p>
+          </div>
+        </aside>
+
+        <div class="content-right">
+          <div class="decisions-list">
+            <!-- 1. Chaining ceiling -->
+            <div class="decision-card">
+              <h3 class="decision-title">1. Connected-Agent Chaining Ceiling</h3>
+              <div class="decision-subgrid">
+                <span class="decision-k">Problem</span>
+                <span class="decision-v">The original planned architecture had an Enterprise Router above the ARB Department Router (3-level hierarchy). Copilot Studio rejected this with the error <code>"Cannot connect an agent that already has a connected agent."</code></span>
+                <span class="decision-k">What I Did</span>
+                <span class="decision-v">Re-architected the system from a 3-level tree into a 2-level hub-and-spoke. The ARB became its own top-level entry point, delivering the same user experience with reduced latency and no nesting overhead.</span>
+              </div>
+            </div>
+
+            <!-- 2. Attachments boundary -->
+            <div class="decision-card">
+              <h3 class="decision-title">2. Attachment Delegation Boundary</h3>
+              <div class="decision-subgrid">
+                <span class="decision-k">Problem</span>
+                <span class="decision-v">Document uploads for draft reviews (such as reviewing a draft architecture proposal or technical position paper) failed when attached to the router. Attachments did not cross the connected-agent delegation boundary in preview.</span>
+                <span class="decision-k">What I Did</span>
+                <span class="decision-v">Established an operational direct-specialist upload pattern. Users review draft documents directly within the relevant specialist agent, preserving complete assistive gap-analysis capabilities.</span>
+              </div>
+            </div>
+
+            <!-- 3. Dataverse quota -->
+            <div class="decision-card">
+              <h3 class="decision-title">3. Dataverse Search-Index Quota Constraints</h3>
+              <div class="decision-subgrid">
+                <span class="decision-k">Problem</span>
+                <span class="decision-v">Configuring large SharePoint document libraries as knowledge sources consumed shared environment Dataverse search-index quota (~255 of ~950 units consumed with Principles connected).</span>
+                <span class="decision-k">What I Did</span>
+                <span class="decision-v">Documented the index consumption pattern and carefully scoped knowledge source connections across the 6 libraries to ensure high-priority certified standards remained fully indexed without exhausting shared tenant capacity.</span>
+              </div>
+            </div>
+
+            <!-- 4. Router formatting leakage -->
+            <div class="decision-card">
+              <h3 class="decision-title">4. Separation of Routing vs. Response Formatting</h3>
+              <div class="decision-subgrid">
+                <span class="decision-k">Problem</span>
+                <span class="decision-v">Adding brevity and formatting rules into the Router’s instructions degraded generative orchestration, causing missing routing labels, <code>{"Done":true}</code> JSON leaks, and response duplication.</span>
+                <span class="decision-k">What I Did</span>
+                <span class="decision-v">Strictly stripped all formatting, length, and label generation rules from the router. The router contains only intent determination and routing logic. All formatting rules were pushed into the specialist agents.</span>
+              </div>
+            </div>
+
+            <!-- 5. Canvas duplication artifact -->
+            <div class="decision-card">
+              <h3 class="decision-title">5. Authoring Canvas Duplicate Responses</h3>
+              <div class="decision-subgrid">
+                <span class="decision-k">Problem</span>
+                <span class="decision-v">During development, agents intermittently printed identical correct responses 2 - 4 times in a single turn within the Copilot Studio test panel.</span>
+                <span class="decision-k">What I Did</span>
+                <span class="decision-v">Systematically investigated 8+ candidate causes (stray router knowledge, conversational boosting, fallback topics, duplicate agent entries). Isolated the symptom to the preview test canvas and confirmed 0 production duplication defects in the company-wide deployment.</span>
+              </div>
+            </div>
+
+            <!-- 6. Configuration defect resolution -->
+            <div class="decision-card">
+              <h3 class="decision-title">6. Systematic Configuration Defect Elimination</h3>
+              <div class="decision-subgrid">
+                <span class="decision-k">Problem</span>
+                <span class="decision-v">Model verbosity, missing routing labels, <code>{Bot.Name}</code> resolving to the technical agent name instead of the branded system identity, and meta-comment leaks ("I cannot add to the prior response").</span>
+                <span class="decision-k">What I Did</span>
+                <span class="decision-v">Moved a strict 50-word / 3-bullet length policy to the first line of each specialist prompt (exploiting positional prompt weighting), baked routing labels into specialist first lines, replaced dynamic variables with static greetings, and suppressed model self-narration.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rigorous Evaluation Section -->
+    <section id="evaluation" class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">04 // VERIFICATION</span>
+            <h2 class="section-title">Evaluation Portfolio</h2>
+            <p class="rail-desc">
+              165+ rubric-based test cases separating production engineering from prototype demos.
+            </p>
+          </div>
+        </aside>
+
+        <div class="content-right">
+          <div style="display:flex; flex-direction:column; gap:var(--space-4); max-width:var(--max-w-prose);">
+            <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+              To verify system reliability before rolling it out organization-wide, I authored and maintained 165+ test cases across 5 CSV evaluation suites.
+            </p>
+
+            <div class="siris-points-grid" style="grid-template-columns: 1fr 1fr; margin-top:var(--space-2);">
+              <div class="point-card">
+                <span class="point-title">Master ARB Suite</span>
+                <p class="point-desc">
+                  100 test cases: 12 per specialist across all six domains, plus multi-specialist fan-out, out-of-scope refusals, and Entra ID access boundaries.
+                </p>
+              </div>
+              <div class="point-card">
+                <span class="point-title">Compliance PoC Suite</span>
+                <p class="point-desc">
+                  20 test cases: achieved a clean 20/20 run across advertising material classification, active-dated disclosure matching, and compliance language checks.
+                </p>
+              </div>
+            </div>
+
+            <div class="point-card" style="margin-top:var(--space-3);">
+              <span class="point-title">Critical Evaluation Insight: Custom Rubric vs. Automated Grader</span>
+              <p class="point-desc">
+                The platform's built-in grader scored generic conversational quality rather than governance accuracy - failing correct refusals because it interpreted a refusal as "did not answer." As a result, I conducted rigorous manual verification across all test runs using a customized rubric evaluating grounding, citation presence, and status discrimination.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Generalizing to Compliance & Takeaways -->
+    <section id="takeaways" class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">05 // PERSPECTIVE</span>
+            <h2 class="section-title">Key Takeaways</h2>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <blockquote style="border-left: 2px solid var(--accent); padding-left: var(--space-4); font-size: var(--text-md); color: var(--text-primary); line-height: 1.6;">
+            "AI is a grounding problem before it's a model problem. Grounding, citations, permission scoping, and refusal behavior are core architectural decisions, not afterthoughts."
+          </blockquote>
+
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            The project demonstrated that reliable enterprise AI does not come from clever general-purpose prompting; it requires strictly bounding where each agent can look, ensuring the user's existing security credentials govern retrieval, and engineering deterministic refusal states.
+          </p>
+
+          <div style="padding-top: var(--space-4); border-top: 1px solid var(--border-hairline); display:flex; align-items:center; gap:var(--space-4);">
+            <a href="../index.html#contact" class="btn-primary">
+              <span>Get in Touch Regarding System Engineering</span>
+              <span aria-hidden="true">→</span>
+            </a>
+            <a href="../index.html" class="btn-secondary">
+              <span>Back to Home</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer reveal-on-scroll" role="contentinfo">
+    <div class="container">
+      <div class="footer-subline" style="margin-top:0; border-top:none; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+        <span>Dhruv Kithany · Systems &amp; Machine Learning Engineering</span>
+        <div style="display:flex; align-items:center; gap:16px;">
+          <a href="../index.html" style="color:var(--text-secondary);">Home</a>
+          <a href="../stackscope.html" style="color:var(--text-secondary);">StackScope VM</a>
+          <a href="../mindmesh.html" style="color:var(--text-secondary);">MindMesh EEG</a>
+          <a href="../lumina.html" style="color:var(--text-secondary);">Lumina HUD</a>
+          <a href="../eagle.html" style="color:var(--text-secondary);">Eagle Scout Project</a>
+          <a href="../experience.html" style="color:var(--accent);">Resume PDF ↗</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js?v=7.0"></script>
+</body>
+</html>

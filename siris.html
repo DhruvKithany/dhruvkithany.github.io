@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIRIS Case Study  -  Production Multi-Agent RAG | Dhruv Kithany</title>
+  <meta name="description" content="Deep-dive engineering case study on SIRIS: a production multi-agent RAG system built on Copilot Studio, Azure OpenAI (GPT-5.5), and Entra ID for enterprise architecture governance.">
+  <link rel="canonical" href="https://dhruvkithany.github.io/siris.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="SIRIS: Production Multi-Agent RAG Case Study  -  Dhruv Kithany">
+  <meta property="og:description" content="Architecture, 6 engineering tradeoffs, 165+ evaluation cases, and production lessons from deploying an 8-agent RAG assistant company-wide.">
+  <meta property="og:url" content="https://dhruvkithany.github.io/siris.html">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22%2307080A%22 stroke=%22%23F59E0B%22 stroke-width=%228%22/><text y=%2258%22 x=%2250%22 text-anchor=%22middle%22 font-family=%22monospace%22 font-weight=%22700%22 font-size=%2246%22 fill=%22%23F59E0B%22>S</text></svg>">
+
+  <link rel="stylesheet" href="assets/css/style.css?v=7.0">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:image" content="https://dhruvkithany.github.io/assets/images/og-siris.png">
+  <meta name="twitter:image" content="https://dhruvkithany.github.io/assets/images/og-siris.png">
+</head>
+<body>
+  <div id="reading-progress" class="reading-progress-bar" aria-hidden="true"></div>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <!-- Unified Header -->
+                                  <header class="site-header" id="site-header" role="banner">
+    <div class="nav-container">
+      <a href="index.html" class="site-logo" aria-label="Dhruv Kithany Home">
+        dhruv_kithany
+      </a>
+
+    <nav class="nav-links" aria-label="Main Navigation">
+      <a href="index.html#work" class="nav-link">Work</a>
+      <a href="experience.html" class="nav-link">Experience</a>
+      <a href="writing.html" class="nav-link">Writing</a>
+      <a href="experience.html" class="nav-resume">Resume ↗</a>
+    </nav>
+
+    <div class="header-controls">
+      <button type="button" class="header-btn" id="global-static-toggle" aria-pressed="false" title="Reduce motion and disable continuous animation loops">Reduce motion</button>
+      <button type="button" class="header-btn" id="global-index-toggle" aria-expanded="false" aria-controls="global-index-modal" title="Jump to section or project">Jump to</button>
+    </div>
+    </div>
+  </header>
+
+
+  <main id="main-content">
+    <!-- Title Block -->
+    <article class="case-study-hero">
+      <div class="container">
+        <div style="display:flex; flex-direction:column; gap:var(--space-3); max-width:840px;">
+          <div class="tag-row">
+            <span class="tag tag-accent">SYSTEM CASE STUDY</span>
+            <span class="tag">PUBLISHED COMPANY-WIDE</span>
+            <span class="tag">ENTERPRISE ARCHITECTURE</span>
+          </div>
+          <h1 class="siris-title" style="font-size: clamp(2rem, 1.8rem + 1.5vw, 3rem);">
+            SIRIS: Structured Intelligent Routing & Information System
+          </h1>
+          <p class="siris-oneliner">
+            A production, retrieval-augmented, multi-agent enterprise assistant giving one natural-language entry point to distributed architecture governance knowledge. Published company-wide across Federated Hermes.
+          </p>
+
+          <!-- Metadata Spec Grid -->
+          <div class="case-study-meta-grid">
+            <div class="spec-item">
+              <span class="spec-k">Role</span>
+              <span class="spec-v">Sole Architect & Developer</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-k">Timeline</span>
+              <span class="spec-v">May  -  Aug 2026</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-k">Stack</span>
+              <span class="spec-v">Copilot Studio · Azure OpenAI (GPT-5.5) · Entra ID</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-k">Verification</span>
+              <span class="spec-v">165+ Rubric Cases · 6/6 Specialists Verified</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Problem Statement -->
+    <section id="problem" class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">01 // CONTEXT</span>
+            <h2 class="section-title">The Problem</h2>
+          </div>
+        </aside>
+        <div class="content-right" style="max-width: var(--max-w-prose);">
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            Sitting in weekly Architecture Review Board meetings, specific technical questions kept stalling high-level discussions because architects and engineers didn't know which library owned the authoritative answer.
+          </p>
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            Governance knowledge was fragmented across six distinct SharePoint libraries - Standards, Principles, Exceptions, Permits to Build (PtBs), Roadmaps, and Production Position Documents (PPDs). Each had its own owners, taxonomy, and dense institutional vocabulary.
+          </p>
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            Finding a definitive answer meant knowing which repository owned it, locating the file, and cross-referencing multiple documents by hand. This reliance on scarce subject-matter experts introduced significant drag - and created a real risk that teams might skip required governance checks because the manual lookup path was too costly. The goal was simple: surface the authoritative source in seconds with complete verification.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture & Diagram -->
+    <section id="architecture" class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">02 // APPROACH</span>
+            <h2 class="section-title">Approach: Multi-Agent Topology</h2>
+          </div>
+        </aside>
+        <div class="content-right">
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7; max-width: var(--max-w-prose);">
+            SIRIS uses a two-level hub-and-spoke multi-agent topology. One ARB router receives the user’s query, analyzes intent, and delegates directly to one of six specialist agents. An eighth agent extends this exact pattern to Compliance as a proof of concept.
+          </p>
+
+          <!-- Master Architecture SVG -->
+          <div class="arch-diagram-container">
+            <svg class="arch-svg" viewBox="0 0 760 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Security Boundary -->
+              <rect x="15" y="15" width="730" height="330" rx="8" stroke="#1B1E24" fill="#0D0F13" />
+              <text x="35" y="42" fill="#F59E0B" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600">ENTRA ID SECURITY LAYER  -  USER IDENTITY SCOPING (0 STANDING AI PRIVILEGES)</text>
+
+              <!-- Router -->
+              <rect x="250" y="65" width="260" height="60" rx="4" fill="#12151B" stroke="#F59E0B" stroke-width="1.5" />
+              <text x="380" y="90" fill="#E8E9EC" font-family="'Geist', sans-serif" font-size="14" font-weight="600" text-anchor="middle">ARB Routing Agent (Hub)</text>
+              <text x="380" y="108" fill="#7C828D" font-family="'JetBrains Mono', monospace" font-size="10" text-anchor="middle">Generative Intent Parser · Zero Knowledge Sources</text>
+
+              <!-- Connection Lines with Interactive Beam Lighting -->
+              <path d="M 380 125 L 90 185" class="arch-link arch-link-standards" stroke="#252B35" stroke-width="1.2" />
+              <path d="M 380 125 L 205 185" class="arch-link arch-link-principles" stroke="#252B35" stroke-width="1.2" />
+              <path d="M 380 125 L 320 185" class="arch-link arch-link-exceptions" stroke="#252B35" stroke-width="1.2" />
+              <path d="M 380 125 L 440 185" class="arch-link arch-link-ptbs" stroke="#252B35" stroke-width="1.2" />
+              <path d="M 380 125 L 555 185" class="arch-link arch-link-roadmaps" stroke="#252B35" stroke-width="1.2" />
+              <path d="M 380 125 L 670 185" class="arch-link arch-link-ppds" stroke="#252B35" stroke-width="1.2" />
+
+              <!-- 6 Specialists with Interactive Hover & Beam Illumination -->
+              <g class="arch-agent-node" data-agent="standards" tabindex="0" role="button" data-noop-ok="Default active specialist node at initial load" aria-label="Specialist: ARB Standards" transform="translate(35, 185)">
+                <rect width="105" height="60" rx="4" fill="#07080A" stroke="#1B1E24" />
+                <text x="52" y="24" fill="#E8E9EC" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" text-anchor="middle">ARB-Standards</text>
+                <text x="52" y="44" fill="#7C828D" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">Mandatory Rules</text>
+              </g>
+
+              <g class="arch-agent-node" data-agent="principles" tabindex="0" role="button" aria-label="Specialist: ARB Principles" transform="translate(150, 185)">
+                <rect width="105" height="60" rx="4" fill="#07080A" stroke="#1B1E24" />
+                <text x="52" y="24" fill="#E8E9EC" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" text-anchor="middle">ARB-Principles</text>
+                <text x="52" y="44" fill="#7C828D" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">Guiding Direction</text>
+              </g>
+
+              <g class="arch-agent-node" data-agent="exceptions" tabindex="0" role="button" aria-label="Specialist: ARB Exceptions" transform="translate(265, 185)">
+                <rect width="105" height="60" rx="4" fill="#07080A" stroke="#1B1E24" />
+                <text x="52" y="24" fill="#E8E9EC" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" text-anchor="middle">ARB-Exceptions</text>
+                <text x="52" y="44" fill="#7C828D" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">Waivers & Expiry</text>
+              </g>
+
+              <g class="arch-agent-node" data-agent="ptbs" tabindex="0" role="button" aria-label="Specialist: ARB PtBs" transform="translate(380, 185)">
+                <rect width="105" height="60" rx="4" fill="#07080A" stroke="#1B1E24" />
+                <text x="52" y="24" fill="#E8E9EC" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" text-anchor="middle">ARB-PtBs</text>
+                <text x="52" y="44" fill="#7C828D" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">Permit to Build</text>
+              </g>
+
+              <g class="arch-agent-node" data-agent="roadmaps" tabindex="0" role="button" aria-label="Specialist: ARB Roadmaps" transform="translate(495, 185)">
+                <rect width="105" height="60" rx="4" fill="#07080A" stroke="#1B1E24" />
+                <text x="52" y="24" fill="#E8E9EC" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" text-anchor="middle">ARB-Roadmaps</text>
+                <text x="52" y="44" fill="#7C828D" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">Sunset Timelines</text>
+              </g>
+
+              <g class="arch-agent-node" data-agent="ppds" tabindex="0" role="button" aria-label="Specialist: ARB PPDs" transform="translate(610, 185)">
+                <rect width="115" height="60" rx="4" fill="#07080A" stroke="#1B1E24" />
+                <text x="57" y="24" fill="#E8E9EC" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" text-anchor="middle">ARB-PPDs</text>
+                <text x="57" y="44" fill="#7C828D" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">Position Matrix</text>
+              </g>
+
+              <!-- Storage Grounding -->
+              <rect x="35" y="270" width="690" height="48" rx="4" fill="#12151B" stroke="#1B1E24" />
+              <text x="380" y="294" fill="#F59E0B" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600" text-anchor="middle">DEDICATED SHAREPOINT REPOSITORIES (NO BLENDED INDEX)</text>
+              <text x="380" y="308" fill="#7C828D" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">Approved Standards · Principles · Exceptions · PtBs · Roadmaps · PPD Library</text>
+            </svg>
+            <div class="diagram-caption">
+              <span>Figure 2: Complete SIRIS Hub & Specialist Architecture</span>
+              <span>1 Router + 6 Specialists · Entra ID-Scoped</span>
+            </div>
+
+            <!-- Interactive Specialist Agent Inspector (Phase A) -->
+            <div class="agent-inspector-box" id="agent-inspector" role="region" aria-live="polite" style="margin-top: 14px; padding: 12px 16px; background: #0B0B0E; border: 1px solid var(--border-hairline); border-radius: 4px;">
+              <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px;">
+                <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Selected Specialist:</span>
+                <strong class="inspector-name" id="inspector-name" style="color: var(--accent-amber); font-family: var(--font-mono); font-size: 13px;">ARB-Standards</strong>
+              </div>
+              <p class="inspector-desc" id="inspector-desc" style="font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.5;">Evaluates cloud encryption, egress protocols, and enterprise infrastructure baselines against certified standards.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 Engineering Decisions & Tradeoffs -->
+    <section id="tradeoffs" class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">03 // DECISIONS</span>
+            <h2 class="section-title">Engineering Tradeoffs</h2>
+            <p class="rail-desc">
+              Six critical production challenges, root causes, and architectural fixes.
+            </p>
+          </div>
+        </aside>
+
+        <div class="content-right">
+          <div class="decisions-list">
+            <!-- 1. Chaining ceiling -->
+            <div class="decision-card">
+              <h3 class="decision-title">1. Connected-Agent Chaining Ceiling</h3>
+              <div class="decision-subgrid">
+                <span class="decision-k">Problem</span>
+                <span class="decision-v">The original planned architecture had an Enterprise Router above the ARB Department Router (3-level hierarchy). Copilot Studio rejected this with the error <code>"Cannot connect an agent that already has a connected agent."</code></span>
+                <span class="decision-k">What I Did</span>
+                <span class="decision-v">Re-architected the system from a 3-level tree into a 2-level hub-and-spoke. The ARB became its own top-level entry point, delivering the same user experience with reduced latency and no nesting overhead.</span>
+              </div>
+            </div>
+
+            <!-- 2. Attachments boundary -->
+            <div class="decision-card">
+              <h3 class="decision-title">2. Attachment Delegation Boundary</h3>
+              <div class="decision-subgrid">
+                <span class="decision-k">Problem</span>
+                <span class="decision-v">Document uploads for draft reviews (such as reviewing a draft architecture proposal or technical position paper) failed when attached to the router. Attachments did not cross the connected-agent delegation boundary in preview.</span>
+                <span class="decision-k">What I Did</span>
+                <span class="decision-v">Established an operational direct-specialist upload pattern. Users review draft documents directly within the relevant specialist agent, preserving complete assistive gap-analysis capabilities.</span>
+              </div>
+            </div>
+
+            <!-- 3. Dataverse quota -->
+            <div class="decision-card">
+              <h3 class="decision-title">3. Dataverse Search-Index Quota Constraints</h3>
+              <div class="decision-subgrid">
+                <span class="decision-k">Problem</span>
+                <span class="decision-v">Configuring large SharePoint document libraries as knowledge sources consumed shared environment Dataverse search-index quota (~255 of ~950 units consumed with Principles connected).</span>
+                <span class="decision-k">What I Did</span>
+                <span class="decision-v">Documented the index consumption pattern and carefully scoped knowledge source connections across the 6 libraries to ensure high-priority certified standards remained fully indexed without exhausting shared tenant capacity.</span>
+              </div>
+            </div>
+
+            <!-- 4. Router formatting leakage -->
+            <div class="decision-card">
+              <h3 class="decision-title">4. Separation of Routing vs. Response Formatting</h3>
+              <div class="decision-subgrid">
+                <span class="decision-k">Problem</span>
+                <span class="decision-v">Adding brevity and formatting rules into the Router’s instructions degraded generative orchestration, causing missing routing labels, <code>{"Done":true}</code> JSON leaks, and response duplication.</span>
+                <span class="decision-k">What I Did</span>
+                <span class="decision-v">Strictly stripped all formatting, length, and label generation rules from the router. The router contains only intent determination and routing logic. All formatting rules were pushed into the specialist agents.</span>
+              </div>
+            </div>
+
+            <!-- 5. Canvas duplication artifact -->
+            <div class="decision-card">
+              <h3 class="decision-title">5. Authoring Canvas Duplicate Responses</h3>
+              <div class="decision-subgrid">
+                <span class="decision-k">Problem</span>
+                <span class="decision-v">During development, agents intermittently printed identical correct responses 2 - 4 times in a single turn within the Copilot Studio test panel.</span>
+                <span class="decision-k">What I Did</span>
+                <span class="decision-v">Systematically investigated 8+ candidate causes (stray router knowledge, conversational boosting, fallback topics, duplicate agent entries). Isolated the symptom to the preview test canvas and confirmed 0 production duplication defects in the company-wide deployment.</span>
+              </div>
+            </div>
+
+            <!-- 6. Configuration defect resolution -->
+            <div class="decision-card">
+              <h3 class="decision-title">6. Systematic Configuration Defect Elimination</h3>
+              <div class="decision-subgrid">
+                <span class="decision-k">Problem</span>
+                <span class="decision-v">Model verbosity, missing routing labels, <code>{Bot.Name}</code> resolving to the technical agent name instead of the branded system identity, and meta-comment leaks ("I cannot add to the prior response").</span>
+                <span class="decision-k">What I Did</span>
+                <span class="decision-v">Moved a strict 50-word / 3-bullet length policy to the first line of each specialist prompt (exploiting positional prompt weighting), baked routing labels into specialist first lines, replaced dynamic variables with static greetings, and suppressed model self-narration.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rigorous Evaluation Section -->
+    
+    <!-- ================================================================
+         SECTION: DEMO & QUERY INSPECTOR
+         ================================================================ -->
+        <!-- ================================================================
+         SECTION: INTERACTIVE DEMO (SCROLL-DRIVEN ARCHITECTURE SCENE)
+         ================================================================ -->
+    <section id="demo" class="case-study-section">
+      <h2 class="section-title">Demo: Multi-Agent Delegation &amp; Identity Scoping</h2>
+      <p class="section-desc">Interactive execution trace of user queries through the central router and specialist sub-agents with strict token delegation. Scroll down through the 350vh pipeline stage to watch deterministic query ingestion, routing classification, token packet dispatch, and scoped retrieval in real time:</p>
+      
+      <div class="siris-scene-wrapper" id="siris-scene-wrapper">
+        <div class="siris-sticky-stage flagship-demo-card" data-demo="siris" id="siris-stage">
+          <div class="demo-card-header">
+            <div>
+              <span class="demo-badge">Scroll Engine · Reversible Pure Function</span>
+              <span class="demo-title">Intent router &amp; Entra ID token scope</span>
+            </div>
+            <div class="siris-scroll-progress" aria-hidden="true">
+              Pipeline Stage: <span id="siris-progress-pct">0%</span>
+            </div>
+          </div>
+
+          <div class="demo-telemetry-row">
+            <div>Latency: <strong class="siris-m-latency" id="siris-stage-latency">-- ms</strong></div>
+            <div>Token Scope: <strong class="siris-m-scope" id="siris-stage-scope">None</strong></div>
+            <div>Compliance: <strong class="siris-m-compliance" id="siris-stage-compliance">--</strong></div>
+            <div>Phase: <strong id="siris-phase-indicator" style="color:var(--pulse-blue);">01 / Query Ingestion</strong></div>
+          </div>
+
+          <div aria-label="SIRIS Sample Queries" class="demo-toolbar" role="group">
+            <button aria-pressed="true" class="demo-btn siris-btn active" data-noop-ok="Default active query selection at initial load" data-siris-key="q-standards" type="button">Query 1: Cloud Egress</button>
+            <button aria-pressed="false" class="demo-btn siris-btn" data-siris-key="q-exceptions" type="button">Query 2: Uncertified DB</button>
+            <button aria-pressed="false" class="demo-btn siris-btn" data-siris-key="q-ptb" type="button">Query 3: Core Banking</button>
+            <button aria-pressed="false" class="demo-btn siris-btn" data-siris-key="q-refusal" type="button">Query 4: Out-of-Scope Question</button>
+          </div>
+
+          <!-- Dynamic Pipeline Visual Canvas / Grid -->
+          <div class="siris-pipeline-stage-view">
+            <!-- Beat 1: Inbound Query Buffer -->
+            <div class="siris-stage-block siris-query-buffer">
+              <div class="siris-stage-kicker">01 / INBOUND QUERY BUFFER</div>
+              <div class="siris-query-display" id="siris-query-display"></div>
+            </div>
+
+            <!-- Beat 2 & 3: Hub Router & Specialist Nodes -->
+            <div class="siris-mesh-container" id="siris-mesh-container">
+              <div class="siris-mesh-router" id="siris-mesh-router">
+                <span class="siris-mesh-tag">Central Hub</span>
+                <span class="siris-mesh-name">Intent Router</span>
+                <span class="siris-mesh-status" id="siris-router-status">STANDBY</span>
+              </div>
+
+              <!-- Animated Token Packet -->
+              <div class="siris-token-packet" id="siris-token-packet" aria-hidden="true"></div>
+
+              <!-- 6 Specialist Agents -->
+              <div class="siris-mesh-ring" id="siris-mesh-ring">
+                <div class="siris-mesh-node" data-agent-node="standards" id="siris-node-standards">Standards</div>
+                <div class="siris-mesh-node" data-agent-node="principles" id="siris-node-principles">Principles</div>
+                <div class="siris-mesh-node" data-agent-node="exceptions" id="siris-node-exceptions">Exceptions</div>
+                <div class="siris-mesh-node" data-agent-node="ptb" id="siris-node-ptb">PtBs</div>
+                <div class="siris-mesh-node" data-agent-node="roadmaps" id="siris-node-roadmaps">Roadmaps</div>
+                <div class="siris-mesh-node" data-agent-node="ppd" id="siris-node-ppd">PPDs</div>
+              </div>
+            </div>
+
+            <!-- Beat 4: Active Agent & Grounding Telemetry -->
+            <div class="demo-telemetry-row" aria-live="polite" role="region">
+              <div>Active Agent: <strong class="siris-val-agent" id="siris-val-agent" style="color:var(--accent-amber);">--</strong></div>
+              <div>Latency: <strong class="siris-val-latency" id="siris-val-latency">-- ms</strong></div>
+            </div>
+            <div class="demo-telemetry-row">
+              <div>Grounding: <strong class="siris-val-repo" id="siris-val-repo" style="color:var(--pulse-ice);">--</strong></div>
+            </div>
+            <div class="demo-telemetry-row">
+              <div>Scope: <strong class="siris-val-scope" id="siris-val-scope" style="color:var(--accent-emerald);">--</strong></div>
+            </div>
+
+            <!-- Beat 5: Ground-Truth Verdict -->
+            <div class="demo-verdict-box" aria-live="polite" role="region">
+              <span class="demo-verdict-label">Ground-Truth Response:</span>
+              <span class="siris-val-verdict" id="siris-val-verdict">Scroll down to execute architecture pipeline trace.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="evaluation" class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">04 // RESULTS</span>
+            <h2 class="section-title">Results: Evaluation Portfolio</h2>
+            <p class="rail-desc">
+              165+ rubric-based test cases separating production engineering from prototype demos.
+            </p>
+          </div>
+        </aside>
+
+        <div class="content-right">
+          <div style="display:flex; flex-direction:column; gap:var(--space-4); max-width:var(--max-w-prose);">
+            <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+              To verify system reliability before rolling it out organization-wide, I authored and maintained 165+ test cases across 5 CSV evaluation suites.
+            </p>
+
+            <div class="siris-points-grid" style="grid-template-columns: 1fr 1fr; margin-top:var(--space-2);">
+              <div class="point-card">
+                <span class="point-title">Master ARB Suite</span>
+                <p class="point-desc">
+                  100 test cases: 12 per specialist across all six domains, plus multi-specialist fan-out, out-of-scope refusals, and Entra ID access boundaries.
+                </p>
+              </div>
+              <div class="point-card">
+                <span class="point-title">Compliance PoC Suite</span>
+                <p class="point-desc">
+                  20 test cases: achieved a clean 20/20 run across advertising material classification, active-dated disclosure matching, and compliance language checks.
+                </p>
+              </div>
+            </div>
+
+            <div class="point-card" style="margin-top:var(--space-3);">
+              <span class="point-title">Critical Evaluation Insight: Custom Rubric vs. Automated Grader</span>
+              <p class="point-desc">
+                The platform's built-in grader scored generic conversational quality rather than governance accuracy - failing correct refusals because it interpreted a refusal as "did not answer." As a result, I conducted rigorous manual verification across all test runs using a customized rubric evaluating grounding, citation presence, and status discrimination.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+        <!-- What I Would Change (Phase D) -->
+    <section id="what-i-would-change" class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">05 // RETROSPECTIVE</span>
+            <h2 class="section-title">What I would change</h2>
+            <p class="rail-desc">Architectural reflections on routing topology and pipeline decoupling.</p>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            If re-architecting SIRIS from scratch, I would start with a flat 2-level hub-and-spoke routing model on day one rather than discovering the connected-agent chaining ceiling late in integration. I would also decouple intent classification from response synthesis into independent micro-stages earlier to prevent duplicate canvas triggers and reduce latency. Finally, incorporating automated synthetic regression suites directly into the CI/CD pipeline would have caught platform token scope regressions before manual audit cycles.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Generalizing to Compliance & Takeaways -->
+    <section id="takeaways" class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">06 // PERSPECTIVE</span>
+            <h2 class="section-title">Key Takeaways</h2>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <blockquote style="border-left: 2px solid var(--accent); padding-left: var(--space-4); font-size: var(--text-md); color: var(--text-primary); line-height: 1.6;">
+            "AI is a grounding problem before it's a model problem. Grounding, citations, permission scoping, and refusal behavior are core architectural decisions, not afterthoughts."
+          </blockquote>
+
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            The project demonstrated that reliable enterprise AI does not come from clever general-purpose prompting; it requires strictly bounding where each agent can look, ensuring the user's existing security credentials govern retrieval, and engineering deterministic refusal states.
+          </p>
+
+          <div style="padding-top: var(--space-4); border-top: 1px solid var(--border-hairline); display:flex; align-items:center; gap:var(--space-4);">
+            <a href="index.html#contact" class="btn-primary">
+              <span>Get in Touch Regarding System Engineering</span>
+              <span aria-hidden="true">→</span>
+            </a>
+            <a href="index.html" class="btn-secondary">
+              <span>Back to Home</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- Unified Footer -->
+          <div id="global-index-modal" class="global-index-modal" role="dialog" aria-modal="true" aria-labelledby="index-modal-title" hidden>
+    <div id="global-index-backdrop" class="modal-backdrop"></div>
+    <div class="modal-dialog-panel">
+      <div class="modal-header">
+        <h2 id="index-modal-title" class="modal-title">Jump to</h2>
+        <button type="button" id="global-index-close" class="modal-close-btn" aria-label="Close jump modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="jump-group">
+          <div class="jump-group-title">Sections</div>
+          <div class="jump-links-grid">
+            <a href="index.html#work" class="jump-link">Work / Projects</a>
+            <a href="experience.html" class="jump-link">Full Experience</a>
+            <a href="index.html#education" class="jump-link">Education</a>
+            <a href="index.html#skills" class="jump-link">Technical Skills</a>
+            <a href="writing.html" class="jump-link">Writing Hub</a>
+            <a href="index.html#contact" class="jump-link">Contact</a>
+            <a href="experience.html" class="jump-link" target="_blank" rel="noopener noreferrer">Resume (PDF) ↗</a>
+          </div>
+        </div>
+        <div class="jump-group" style="margin-top: 1.5rem;">
+          <div class="jump-group-title">Flagship Projects</div>
+          <div class="jump-links-grid">
+            <a href="siris.html" class="jump-link">SIRIS: Multi-Agent Enterprise RAG</a>
+            <a href="stackscope.html" class="jump-link">StackScope: C0 Bytecode VM &amp; Visualizer</a>
+            <a href="mindmesh.html" class="jump-link">MindMesh: High-Dimensional EEG Decoding</a>
+            <a href="lumina.html" class="jump-link">Lumina: Affective HUD Coaching</a>
+            <a href="eagle.html" class="jump-link">Eagle Scout: Wildlife Shelter Architecture</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+                          <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span class="footer-copy">Dhruv Kithany &copy; 2026</span>
+        <span class="footer-sep">·</span>
+        <span class="footer-tagline">Systems &amp; Machine Learning</span>
+      </div>
+      <div class="footer-links">
+        <a href="index.html#work" class="footer-link">Work</a>
+        <a href="experience.html" class="footer-link">Experience</a>
+        <a href="writing.html" class="footer-link">Writing</a>
+        <a href="experience.html" class="footer-link">Resume</a>
+        <a href="mailto:kithany@wisc.edu" class="footer-link">Email</a>
+        <a href="https://github.com/dhruvkithany" class="footer-link" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+        <a href="https://linkedin.com/in/dhruvkithany" class="footer-link" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+      </div>
+    </div>
+  </footer>
+
+
+  <script src="assets/js/main.js?v=7.0"></script>
+</body>
+</html>
