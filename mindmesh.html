@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindMesh Case Study  -  High-Dimensional EEG Emotion Decoder & Manifold Analyzer</title>
+  <meta name="description" content="Computational neuroengineering case study investigating high-dimensional affective manifolds in human scalp EEG across 88 subjects and 27 fine-grained emotional states.">
+  <link rel="canonical" href="https://dhruvkithany.github.io/mindmesh.html">
+
+  <meta property="og:title" content="MindMesh Case Study  -  Dhruv Kithany">
+  <meta property="og:description" content="Decoding 27 fine-grained emotional states from 462-D multichannel EEG manifolds with strict subject-independent holdouts and RSA geometry analysis.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://dhruvkithany.github.io/mindmesh.html">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css?v=7.0">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:image" content="https://dhruvkithany.github.io/assets/images/og-mindmesh.png">
+  <meta name="twitter:image" content="https://dhruvkithany.github.io/assets/images/og-mindmesh.png">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22%23070709%22 stroke=%22%23F4F3EF%22 stroke-width=%228%22/><text y=%2258%22 x=%2250%22 text-anchor=%22middle%22 font-family=%22monospace%22 font-weight=%22700%22 font-size=%2246%22 fill=%22%23F4F3EF%22>D</text></svg>">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <!-- Unified Header -->
+                                  <header class="site-header" id="site-header" role="banner">
+    <div class="nav-container">
+      <a href="index.html" class="site-logo" aria-label="Dhruv Kithany Home">
+        dhruv_kithany
+      </a>
+
+    <nav class="nav-links" aria-label="Main Navigation">
+      <a href="index.html#work" class="nav-link">Work</a>
+      <a href="experience.html" class="nav-link">Experience</a>
+      <a href="writing.html" class="nav-link">Writing</a>
+      <a href="experience.html" class="nav-resume">Resume ↗</a>
+    </nav>
+
+    <div class="header-controls">
+      <button type="button" class="header-btn" id="global-static-toggle" aria-pressed="false" title="Reduce motion and disable continuous animation loops">Reduce motion</button>
+      <button type="button" class="header-btn" id="global-index-toggle" aria-expanded="false" aria-controls="global-index-modal" title="Jump to section or project">Jump to</button>
+    </div>
+    </div>
+  </header>
+
+
+  <main id="main-content">
+    <!-- Hero Section -->
+    <section class="siris-hero">
+      <div class="container">
+        <div class="siris-back-link">
+          <a href="index.html#projects" class="back-link">
+            <span aria-hidden="true">&larr;</span>
+            <span>Back to All Projects</span>
+          </a>
+        </div>
+
+        <div class="siris-hero-content">
+          <div class="siris-meta-pill">
+            <span class="mono-label">COMPUTATIONAL NEUROENGINEERING // GEOMETRIC ML // EEGEMOTIONS-27</span>
+          </div>
+          <h1 class="siris-hero-title">
+            MindMesh: High-Dimensional EEG Emotion Decoder &amp; Manifold Analyzer
+          </h1>
+          <p class="siris-hero-subtitle">
+            Investigating whether the geometric manifold of human scalp EEG preserves the high-dimensional continuous structure of emotional experience. Built an end-to-end signal processing, manifold learning, and subject-independent decoding pipeline across 88 participants, 14 channels, and 27 fine-grained emotion categories.
+          </p>
+          <div class="project-links" style="margin-top:var(--space-3);">
+            <a href="https://github.com/DhruvKithany/MindMesh" target="_blank" rel="noopener noreferrer" class="btn-primary">
+              <span>GitHub Repository</span> <span aria-hidden="true">↗</span>
+            </a>
+            <a href="index.html#projects" class="btn-secondary">
+              <span>Back to Portfolio</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 4 Key Quantified Metrics -->
+        <div class="siris-stats" style="margin-top: var(--space-8);">
+          <div class="stat-card">
+            <span class="stat-value">30.83%</span>
+            <span class="stat-label">27-Emotion Top-1 Accuracy</span>
+            <span class="stat-sub">8.3x vs 3.70% random baseline</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">79.83%</span>
+            <span class="stat-label">27-Emotion Top-5 Accuracy</span>
+            <span class="stat-sub">Strict holdout across unseen subjects</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">p = 0.0077</span>
+            <span class="stat-label">RSA Neural-Affective Match</span>
+            <span class="stat-sub">r = 0.1420 vs psychological circumplex</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">d &approx; 13.4</span>
+            <span class="stat-label">Two-NN Intrinsic Dimension</span>
+            <span class="stat-sub">14 channels capture 95% variance</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 1: Research Question & Paradigm -->
+    <section class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">01 // CONTEXT</span>
+            <h2 class="section-title">Context: Core Scientific Question</h2>
+            <p class="rail-desc">Does electrical brain activity preserve the continuous geometry of 27 human emotions?</p>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <p style="font-size: var(--text-md); color: var(--text-primary); line-height: 1.7;">
+            Classical psychology debated whether emotions fit into discrete categorical boxes (such as Ekman's 6 basic emotions) or continuous 2D axes (Russell's Valence-Arousal circumplex). Seminal work by Cowen &amp; Keltner (<em>PNAS</em>, 2017) demonstrated that emotional experience forms a continuous, high-dimensional space spanning 27 distinct categories.
+          </p>
+          <blockquote style="border-left: 2px solid var(--accent); padding-left: var(--space-4); font-size: var(--text-base); color: var(--text-primary); line-height: 1.6;">
+            <strong>Central Hypothesis:</strong> Does the low-dimensional geometric manifold embedded in multichannel scalp EEG reflect the continuous topological structure of emotional experience, and can fine-grained affective states be reliably decoded across completely unseen human subjects?
+          </blockquote>
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            Using the newly released EEGEmotions-27 dataset (88 participants, 14 channels at 128 Hz recorded during video emotion-induction trials), this project implements an end-to-end pipeline covering signal processing, manifold learning, Representational Similarity Analysis (RSA), subject-independent decoding benchmarks, and class-conditional generative synthesis.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: 462-D Feature Engineering Pipeline -->
+    <section class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">02 // APPROACH</span>
+            <h2 class="section-title">Approach: Feature Computation &amp; Manifold Geometry</h2>
+            <p class="rail-desc">462-dimensional spatial, spectral, entropy, and non-linear dynamic representations.</p>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            From each of the 14 international 10-20 electrode positions (AF3, F7, F3, FC5, T7, P7, O1, O2, P8, T8, FC6, F4, F8, AF4), we compute 33 hand-crafted neurobiological features ($33 \times 14 = 462$ ambient dimensions):
+          </p>
+
+          <div class="siris-points-grid" style="grid-template-columns: 1fr 1fr; margin-top:var(--space-2);">
+            <div class="point-card">
+              <span class="point-title">Spectral Power (Welch PSD)</span>
+              <p class="point-desc">
+                Log-power across Delta (1 - 4 Hz), Theta (4 - 8 Hz), Alpha (8 - 13 Hz), Beta (13 - 30 Hz), Gamma (30 - 45 Hz), total power, relative band powers, and Beta/Alpha activation ratio.
+              </p>
+            </div>
+            <div class="point-card">
+              <span class="point-title">Information-Theoretic Entropies</span>
+              <p class="point-desc">
+                Shannon Entropy, generalized Rényi Entropy (&alpha;=2), and non-extensive Tsallis Entropy (q=2) capturing neural signal complexity and microstate distribution.
+              </p>
+            </div>
+            <div class="point-card">
+              <span class="point-title">Non-linear Dynamics &amp; Hjorth</span>
+              <p class="point-desc">
+                Hjorth Activity (variance), Hjorth Mobility (mean frequency), and Hjorth Complexity (spectral bandwidth), alongside zero-crossing rate and higher-order moments.
+              </p>
+            </div>
+            <div class="point-card">
+              <span class="point-title">Hemispheric Prefrontal Asymmetry</span>
+              <p class="point-desc">
+                Differential asymmetry across paired prefrontal electrodes: Frontal Alpha Asymmetry $\text{FAA} = \ln(\alpha_{\text{AF4}}) - \ln(\alpha_{\text{AF3}})$.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Neurobiology & Frontal Alpha Asymmetry -->
+    <section class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">03 // NEUROBIOLOGY</span>
+            <h2 class="section-title">Frontal Asymmetry</h2>
+            <p class="rail-desc">Prefrontal hemispheric lateralization resolves approach vs. avoidance motivation.</p>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            Under the classical "alpha paradox," synchronous alpha rhythm (8 - 13 Hz) reflects cortical idling or inhibition: when an area of the cerebral cortex activates, its local alpha power decreases. Prefrontal lateralization is formally quantified by comparing right vs. left prefrontal alpha power:
+          </p>
+
+          <div class="tech-code-box">
+<pre>FAA = ln(Alpha_AF4) - ln(Alpha_AF3)
+
+Positive FAA: Relative right alpha power is higher -> Left prefrontal cortex is more active
+              -> Approach motivation / Positive valence (Joy, Excitement, Craving)
+Negative FAA: Relative left alpha power is higher -> Right prefrontal cortex is more active
+              -> Avoidance / Withdrawal motivation (Sadness, Fear, Disgust)</pre>
+          </div>
+
+          <div class="figure-card" style="margin-top:var(--space-2);">
+            <img src="assets/img/mindmesh/01_frontal_alpha_asymmetry.png" alt="Frontal Alpha Asymmetry ranking across 27 emotions">
+            <div class="figure-caption">
+              <strong>Figure 1: Frontal Alpha Asymmetry Across 27 Emotional States</strong>
+              Ranking computed across 88 participants at prefrontal sites (AF4 - AF3). Positive values correspond to approach-oriented states (Joy, Sexual Desire, Craving); negative values correspond to avoidance-oriented states (Sadness, Horror, Fear, Disgust).
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Manifold Geometry & RSA -->
+    <section class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">04 // GEOMETRY</span>
+            <h2 class="section-title">Manifold Geometry</h2>
+            <p class="rail-desc">Representational Similarity Analysis (RSA) and Two-NN intrinsic dimensionality.</p>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <div class="point-card">
+            <span class="point-title">1. Representational Similarity Analysis (p = 0.0077)</span>
+            <p class="point-desc">
+              We computed the pairwise Euclidean distance matrix between emotion centroids in the 462-dimensional feature space and compared it against pairwise distances in normative Valence-Arousal psychological space. Distance correlation confirmed a statistically significant alignment ($r = 0.1420, p = 7.70 \times 10^{-3}$; Spearman $\rho = 0.1431, p = 7.25 \times 10^{-3}$), demonstrating that brain wave geometries preserve the topological structure of affective experience.
+            </p>
+          </div>
+
+          <div class="point-card">
+            <span class="point-title">2. Two-NN Intrinsic Dimensionality: d &approx; 13.4</span>
+            <p class="point-desc">
+              Applying the Two-NN algorithm (Facco et al., <em>Sci. Rep.</em> 2017) revealed that the true intrinsic dimensionality of the EEG affective manifold is $d \approx 13.4$. Roughly 97% of the ambient 462 features represent redundant covariance. Principal component analysis confirmed that 14 orthogonal components capture 95% of total variance, directly reflecting the 14 physical electrode channels.
+            </p>
+          </div>
+
+          <div class="figure-grid">
+            <div class="figure-card">
+              <img src="assets/img/mindmesh/02_manifold_diffusion_quadrants.png" alt="2D Diffusion Manifold of Affective Quadrants">
+              <div class="figure-caption">
+                <strong>Figure 2A: Diffusion Laplacian Eigenmaps</strong>
+                Non-linear 2D manifold embedding showing clear topological separation of High Valence / High Arousal (HVHA) from Low Valence / Low Arousal (LVLA).
+              </div>
+            </div>
+            <div class="figure-card">
+              <img src="assets/img/mindmesh/02_neural_emotion_distance_matrix.png" alt="Pairwise Neural Emotion Distance Matrix">
+              <div class="figure-caption">
+                <strong>Figure 2B: Pairwise Neural Centroid Distance Heatmap</strong>
+                $27 \times 27$ matrix measuring representational distance between emotional centroids in 462D feature space.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Subject-Independent Benchmarks -->
+    
+    <!-- ================================================================
+         SECTION: DEMO & SPECTROGRAM VISUALIZER
+         ================================================================ -->
+    <section id="demo" class="case-study-section">
+      <h2 class="section-title">Demo: Interactive EEG Spectrogram &amp; Frequency Bands</h2>
+      <p class="section-desc">Live simulation of frontal theta/alpha/beta power spectral densities across 88 subjects:</p>
+
+<div class="flagship-demo-card" data-demo="mindmesh">
+<div class="demo-card-header">
+<span class="demo-badge">Simulated demo</span>
+<span class="demo-title">10-20 EEG Multichannel Oscilloscope</span>
+</div>
+<div class="demo-telemetry-row">
+<div>FAA Index: <strong class="eeg-val-faa">+0.42</strong></div>
+<div>Active Band: <strong class="eeg-val-band" style="color:var(--accent-cyan);">Alpha (8–12 Hz)</strong></div>
+</div>
+<canvas class="demo-canvas mindmesh-eeg-canvas" height="130" style="width:100%; height:130px; background:#0B0B0E; border:1px solid var(--border-hairline); display:block;" width="400"></canvas>
+<div aria-label="EEG Band Filters" class="demo-toolbar" role="group">
+<button aria-pressed="true" class="demo-btn eeg-band-btn active" data-band="alpha" data-noop-ok="Default active band filter at initial load" type="button">Alpha (8–12 Hz)</button>
+<button aria-pressed="false" class="demo-btn eeg-band-btn" data-band="beta" type="button">Beta (13–30 Hz)</button>
+<button aria-pressed="false" class="demo-btn eeg-band-btn" data-band="theta" type="button">Theta (4–7 Hz)</button>
+<button aria-pressed="false" class="demo-btn eeg-band-btn" data-band="gamma" type="button">Gamma (31–45 Hz)</button>
+</div>
+<div aria-live="polite" class="scene-bars-row" role="region">
+<div class="scene-bar-item"><span class="bar-name">Neutral</span><div class="bar-track"><div class="bar-fill eeg-bar-neutral" style="width:78%"></div></div><span class="bar-val eeg-num-neutral">78%</span></div>
+<div class="scene-bar-item"><span class="bar-name">Valence</span><div class="bar-track"><div class="bar-fill eeg-bar-valence" style="width:64%"></div></div><span class="bar-val eeg-num-valence">64%</span></div>
+<div class="scene-bar-item"><span class="bar-name">Arousal</span><div class="bar-track"><div class="bar-fill eeg-bar-arousal" style="width:38%"></div></div><span class="bar-val eeg-num-arousal">38%</span></div>
+</div>
+<div class="demo-telemetry-row">
+<div>Channels: <strong style="color:var(--accent-emerald);">AF3, AF4, T7, O1 (10-20 System)</strong></div>
+</div>
+</div>
+
+      <figure class="case-study-figure" style="margin-top: 2rem;">
+        <img src="assets/images/mindmesh_manifold.webp" alt="High-dimensional EEG emotion manifold visualization with UMAP projection" width="1280" height="720" loading="lazy">
+        <figcaption class="case-study-figure-caption">EEG Emotion Manifold: 27 fine-grained emotion clusters projected across 88 subjects.</figcaption>
+      </figure>
+    </section>
+
+    <section class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">05 // RESULTS</span>
+            <h2 class="section-title">Results: Decoding Benchmark</h2>
+            <p class="rail-desc">Strict leave-subjects-out evaluation guaranteeing zero cross-subject data leakage.</p>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            All models were evaluated under strict subject-independent splitting (<code>GroupShuffleSplit</code>: 74 training subjects, 14 unseen holdout subjects), ensuring that no individual's time-series segments appear in both training and testing.
+          </p>
+
+          <h3 class="point-title">Task A: 27 Fine-Grained Emotions (Chance Baseline = 3.70%)</h3>
+          <div class="bench-table-wrap">
+            <table class="bench-table">
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>Top-1 Acc</th>
+                  <th>Top-3 Acc</th>
+                  <th>Top-5 Acc</th>
+                  <th>Macro F1</th>
+                  <th>Kappa</th>
+                  <th>Fit Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Random Forest (150 trees)</strong></td>
+                  <td class="highlight">30.83%</td>
+                  <td class="highlight">65.13%</td>
+                  <td class="highlight">79.83%</td>
+                  <td class="highlight">0.3028</td>
+                  <td class="highlight">0.2817</td>
+                  <td>8.80s</td>
+                </tr>
+                <tr>
+                  <td><strong>Deep MLP Neural Network</strong></td>
+                  <td>27.92%</td>
+                  <td>61.99%</td>
+                  <td>80.28%</td>
+                  <td>0.2740</td>
+                  <td>0.2513</td>
+                  <td>54.47s</td>
+                </tr>
+                <tr>
+                  <td><strong>Extra Trees Classifier</strong></td>
+                  <td>26.04%</td>
+                  <td>56.35%</td>
+                  <td>74.36%</td>
+                  <td>0.2520</td>
+                  <td>0.2320</td>
+                  <td>1.05s</td>
+                </tr>
+                <tr>
+                  <td><strong>Logistic Regression (L2)</strong></td>
+                  <td>12.25%</td>
+                  <td>30.14%</td>
+                  <td>47.98%</td>
+                  <td>0.1043</td>
+                  <td>0.0889</td>
+                  <td>17.48s</td>
+                </tr>
+                <tr>
+                  <td><strong>Ridge Classifier</strong></td>
+                  <td>10.48%</td>
+                  <td>28.03%</td>
+                  <td>41.71%</td>
+                  <td>0.0844</td>
+                  <td>0.0706</td>
+                  <td>0.16s</td>
+                </tr>
+                <tr>
+                  <td><strong>Random Chance Baseline</strong></td>
+                  <td>3.70%</td>
+                  <td>11.11%</td>
+                  <td>18.52%</td>
+                  <td>0.0370</td>
+                  <td>0.0000</td>
+                  <td> - </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="point-title" style="margin-top:var(--space-2);">Task B: 4-Class Valence-Arousal Quadrants (Chance Baseline = 25.0%)</h3>
+          <div class="bench-table-wrap">
+            <table class="bench-table">
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>Test Acc</th>
+                  <th>Balanced Acc</th>
+                  <th>Macro F1</th>
+                  <th>Top-3 Acc</th>
+                  <th>Fit Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Random Forest</strong></td>
+                  <td class="highlight">56.64%</td>
+                  <td class="highlight">44.86%</td>
+                  <td class="highlight">0.4340</td>
+                  <td class="highlight">98.12%</td>
+                  <td>5.97s</td>
+                </tr>
+                <tr>
+                  <td><strong>Extra Trees</strong></td>
+                  <td>53.79%</td>
+                  <td>42.58%</td>
+                  <td>0.4094</td>
+                  <td>95.67%</td>
+                  <td>0.61s</td>
+                </tr>
+                <tr>
+                  <td><strong>Deep MLP Neural Net</strong></td>
+                  <td>50.20%</td>
+                  <td>42.98%</td>
+                  <td>0.4315</td>
+                  <td>96.70%</td>
+                  <td>20.45s</td>
+                </tr>
+                <tr>
+                  <td><strong>Logistic Regression</strong></td>
+                  <td>42.11%</td>
+                  <td>33.54%</td>
+                  <td>0.3144</td>
+                  <td>91.34%</td>
+                  <td>6.31s</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="figure-card" style="margin-top:var(--space-3);">
+            <img src="assets/img/mindmesh/03_confusion_matrix_cowen27.png" alt="Confusion Matrix across 27 Cowen Emotion Classes">
+            <div class="figure-caption">
+              <strong>Figure 3: Out-of-Sample Confusion Matrix (27 Emotions)</strong>
+              Evaluated across 14 unseen holdout human subjects. Note strong diagonal density and clustering along semantic emotion families (e.g., amusement/joy, awe/interest, fear/horror).
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: Covariance Shrinkage & Synthesis -->
+    <section class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">06 // GENERATIVE</span>
+            <h2 class="section-title">Generative Prior</h2>
+            <p class="rail-desc">Ledoit-Wolf covariance shrinkage solving high-dimensional sample singularity.</p>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            In 462-dimensional feature space where individual class trial counts are limited ($N_c < P$), the empirical sample covariance matrix is singular. We formulate a class-conditional generative prior parameterized with <strong>Ledoit-Wolf covariance shrinkage</strong>:
+          </p>
+
+          <div class="tech-code-box">
+<pre>\hat{\Sigma}^* = (1 - \rho)\hat{\Sigma} + \rho \nu I
+p(X | y = c) = N(\mu_c, \hat{\Sigma}_c^*)</pre>
+          </div>
+
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            This optimal linear shrinkage provides positive-definite covariance matrices that allow generating synthetic EEG trials without mode collapse, verified via Fréchet Distance (FD = 116.88 for Sadness, FD = 401.60 for Anger).
+          </p>
+
+          <div style="padding-top: var(--space-4); border-top: 1px solid var(--border-hairline); display:flex; align-items:center; gap:var(--space-4); flex-wrap:wrap;">
+            <a href="https://github.com/DhruvKithany/MindMesh" target="_blank" rel="noopener noreferrer" class="btn-primary">
+              <span>View MindMesh Code on GitHub</span>
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+            <a href="index.html#projects" class="btn-secondary">
+              <span>Back to Portfolio</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+      <!-- Section: What I Would Change (Phase D) -->
+    <section id="what-i-would-change" class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">06 // RETROSPECTIVE</span>
+            <h2 class="section-title">What I would change</h2>
+            <p class="rail-desc">Reflections on sensor density and self-supervised representations.</p>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            While the 14-channel Emotiv montage enabled rapid non-invasive capture across 88 participants, higher-density 64-channel montage recordings would significantly enhance source localization accuracy and spatial fidelity on the cortical manifold. Furthermore, rather than relying exclusively on hand-crafted spectral and entropy features, pre-training self-supervised foundation encoders on large unlabelled resting-state EEG datasets would improve cross-subject generalizability on downstream fine-grained emotional decoding.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <!-- Unified Footer -->
+          <div id="global-index-modal" class="global-index-modal" role="dialog" aria-modal="true" aria-labelledby="index-modal-title" hidden>
+    <div id="global-index-backdrop" class="modal-backdrop"></div>
+    <div class="modal-dialog-panel">
+      <div class="modal-header">
+        <h2 id="index-modal-title" class="modal-title">Jump to</h2>
+        <button type="button" id="global-index-close" class="modal-close-btn" aria-label="Close jump modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="jump-group">
+          <div class="jump-group-title">Sections</div>
+          <div class="jump-links-grid">
+            <a href="index.html#work" class="jump-link">Work / Projects</a>
+            <a href="experience.html" class="jump-link">Full Experience</a>
+            <a href="index.html#education" class="jump-link">Education</a>
+            <a href="index.html#skills" class="jump-link">Technical Skills</a>
+            <a href="writing.html" class="jump-link">Writing Hub</a>
+            <a href="index.html#contact" class="jump-link">Contact</a>
+            <a href="experience.html" class="jump-link" target="_blank" rel="noopener noreferrer">Resume (PDF) ↗</a>
+          </div>
+        </div>
+        <div class="jump-group" style="margin-top: 1.5rem;">
+          <div class="jump-group-title">Flagship Projects</div>
+          <div class="jump-links-grid">
+            <a href="siris.html" class="jump-link">SIRIS: Multi-Agent Enterprise RAG</a>
+            <a href="stackscope.html" class="jump-link">StackScope: C0 Bytecode VM &amp; Visualizer</a>
+            <a href="mindmesh.html" class="jump-link">MindMesh: High-Dimensional EEG Decoding</a>
+            <a href="lumina.html" class="jump-link">Lumina: Affective HUD Coaching</a>
+            <a href="eagle.html" class="jump-link">Eagle Scout: Wildlife Shelter Architecture</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+                          <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span class="footer-copy">Dhruv Kithany &copy; 2026</span>
+        <span class="footer-sep">·</span>
+        <span class="footer-tagline">Systems &amp; Machine Learning</span>
+      </div>
+      <div class="footer-links">
+        <a href="index.html#work" class="footer-link">Work</a>
+        <a href="experience.html" class="footer-link">Experience</a>
+        <a href="writing.html" class="footer-link">Writing</a>
+        <a href="experience.html" class="footer-link">Resume</a>
+        <a href="mailto:kithany@wisc.edu" class="footer-link">Email</a>
+        <a href="https://github.com/dhruvkithany" class="footer-link" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+        <a href="https://linkedin.com/in/dhruvkithany" class="footer-link" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+      </div>
+    </div>
+  </footer>
+
+
+  <script src="assets/js/main.js?v=7.0"></script>
+</body>
+</html>
