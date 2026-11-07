@@ -1,0 +1,42 @@
+# Personal Site .gitignore
+
+# Operating System & IDE artifacts
+.DS_Store
+Thumbs.db
+*.swp
+*.bak
+*~
+.idea/
+.vscode/
+
+# Private notes & credentials
+Info Dump.txt
+Info_Dump.txt
+*Info*Dump*
+*.env
+*.env.*
+
+# Resumes, Reports & LaTeX sources (served via interactive site)
+*.pdf
+*.tex
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# Test runners, QA suites & Reports
+reports/
+tests/
+scratch/
+node_modules/
+package.json
+package-lock.json
+
+# Python bytecode & caches
+__pycache__/
+*.py[cod]
+*$py.class
+make_clean_commits.py

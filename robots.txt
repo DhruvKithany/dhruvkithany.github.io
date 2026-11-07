@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /reports/
+Disallow: /tests/
+Disallow: /portfolio_backup/
+Allow: /
+
+Sitemap: https://dhruvkithany.github.io/sitemap.xml
