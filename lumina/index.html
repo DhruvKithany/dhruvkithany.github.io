@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lumina Case Study  -  Real-Time Affective Computer Vision & HUD Presenter Coaching</title>
+  <meta name="description" content="Technical deep-dive into Lumina: an affective computing layer and transparent PyQt6 HUD presenter coaching system powered by MediaPipe CV and Groq LLM streaming.">
+  <link rel="canonical" href="https://dhruvkithany.github.io/lumina/">
+
+  <meta property="og:title" content="Lumina Case Study  -  Dhruv Kithany">
+  <meta property="og:description" content="Real-time affective computer vision presenter coaching system: transparent PyQt6 HUD, 468-point 3D facial mesh, 33-point skeletal kinesic variance, and WebRTC VAD stall detection.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://dhruvkithany.github.io/lumina/">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css?v=7.0">
+</head>
+<body class="siris-body">
+  <div class="reading-progress-bar" id="reading-progress" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="nav-container">
+      <a href="index.html" class="site-logo">
+        dhruv_kithany <span>/</span> lumina
+      </a>
+
+      <nav class="nav-links">
+        <a href="../index.html#experience" class="nav-link">Experience</a>
+        <a href="../index.html#research" class="nav-link">Research</a>
+        <a href="../index.html#projects" class="nav-link">Projects</a>
+        <a href="../writing.html" class="nav-link">Writing</a>
+        <a href="../experience.html" target="_blank" class="nav-resume">Resume (PDF) ↗</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- Hero Section -->
+    <section class="siris-hero">
+      <div class="container">
+        <div class="siris-back-link">
+          <a href="../index.html#projects" class="back-link">
+            <span aria-hidden="true">&larr;</span>
+            <span>Back to All Projects</span>
+          </a>
+        </div>
+
+        <div class="siris-hero-content">
+          <div class="siris-meta-pill">
+            <span class="mono-label">AFFECTIVE COMPUTING // COMPUTER VISION // PYQT6 HUD</span>
+          </div>
+          <h1 class="siris-hero-title">
+            Lumina: Real-Time Affective Computer Vision &amp; HUD Presenter Coaching
+          </h1>
+          <p class="siris-hero-subtitle">
+            An affective computing layer turning standard laptop webcams into real-time presentation coaching systems. Co-architected the frontend and HUD rendering pipeline: a transparent, always-on-top PyQt6 overlay, 468-point 3D facial mesh gaze tracking, 33-point skeletal kinesic variance detection, and WebRTC VAD cognitive stall probes via Groq LLM streaming.
+          </p>
+          <div class="project-links" style="margin-top:var(--space-3);">
+            <a href="https://github.com/DhruvKithany/Lumina-Presenter" target="_blank" rel="noopener noreferrer" class="btn-primary">
+              <span>GitHub Repository</span> <span aria-hidden="true">↗</span>
+            </a>
+            <a href="../index.html#projects" class="btn-secondary">
+              <span>Back to Portfolio</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 4 Key Quantified Metrics -->
+        <div class="siris-stats" style="margin-top: var(--space-8);">
+          <div class="stat-card">
+            <span class="stat-value">Real-time</span>
+            <span class="stat-label">Transparent HUD Rendering</span>
+            <span class="stat-sub">16ms QTimer smooth tick</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">468 + 33</span>
+            <span class="stat-label">Landmark Tracking Points</span>
+            <span class="stat-sub">3D face mesh + skeletal joints</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">&gt;2.5s</span>
+            <span class="stat-label">VAD Silence Stall Trigger</span>
+            <span class="stat-sub">Automated cognitive pause detection</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">&lt;500ms</span>
+            <span class="stat-label">Groq AI Probe Latency</span>
+            <span class="stat-sub">Real-time coaching prompt synthesis</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 1: Motivation & Problem -->
+    <section class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">01 // MOTIVATION</span>
+            <h2 class="section-title">The Challenge</h2>
+            <p class="rail-desc">Eliminating blind spots in technical presentations without hardware bloat.</p>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <p style="font-size: var(--text-md); color: var(--text-primary); line-height: 1.7;">
+            During high-stakes technical presentations, interviews, and remote defenses, presenters suffer from unconscious kinesic breakdowns: rapid pacing, nervous wrist fidgeting, breaking eye contact with the camera lens, and cognitive stalls during difficult transitions.
+          </p>
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            Existing public speaking tools rely on intrusive wearables (smartbands, chest straps), expensive multi-camera studio rigs, or post-hoc video recordings that deliver reports hours after the presentation is over.
+          </p>
+          <blockquote style="border-left: 2px solid var(--accent); padding-left: var(--space-4); font-size: var(--text-base); color: var(--text-primary); line-height: 1.6;">
+            <strong>Design Objective:</strong> Build an affective computing layer that operates strictly on standard laptop webcams with zero external hardware, surfacing non-disruptive, real-time feedback through a transparent Heads-Up Display (HUD) floating directly over active video calls or presentation decks.
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: HUD Architecture & Decoupled State -->
+    <section class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">02 // ARCHITECTURE</span>
+            <h2 class="section-title">HUD Architecture</h2>
+            <p class="rail-desc">Decoupling heavy CV pipeline inference from Real-time PyQt6 GUI rendering.</p>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            The central engineering challenge was preventing heavy computer vision processing (468-point face mesh + 33-point pose estimation) from causing frame drops or stuttering in the desktop overlay.
+          </p>
+
+          <div class="tech-code-box">
+<pre>┌────────────────────────┐      ┌───────────────────────────┐      ┌───────────────────────────┐
+│     Webcam Capture     │ ───► │   MediaPipe CV Pipeline   │ ───► │   TelemetryState (core)   │
+│   (OpenCV Device IO)   │      │ (Pose, Gaze, Wrist Var)   │      │   .snapshot() Thread-Safe │
+└────────────────────────┘      └───────────────────────────┘      └─────────────┬─────────────┘
+                                                                                 │ Reads
+                                                                                 ▼
+┌────────────────────────┐      ┌───────────────────────────┐      ┌───────────────────────────┐
+│  Audio VAD & Groq Probe│ ───► │    Probe Injection Unit   │ ───► │  PyQt6 Transparent HUD    │
+│  (Silence Stall Engine)│      │  (Fade-in / Fade-out Q&A) │      │  (Real-time Frameless QTimer)│
+└────────────────────────┘      └───────────────────────────┘      └───────────────────────────┘</pre>
+          </div>
+
+          <div class="siris-points-grid" style="grid-template-columns: 1fr 1fr; margin-top:var(--space-2);">
+            <div class="point-card">
+              <span class="point-title">Single Source of Truth (`state.py`)</span>
+              <p class="point-desc">
+                The HUD overlay UI operates strictly as an immutable consumer. It reads from <code>TelemetryState.snapshot()</code> via a 16ms <code>QTimer</code> tick and never writes back to the vision or audio pipelines, eliminating race conditions.
+              </p>
+            </div>
+            <div class="point-card">
+              <span class="point-title">Zero-Chrome Frameless Overlay</span>
+              <p class="point-desc">
+                Constructed via <code>Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint</code> with translucent RGBA background composition, allowing presenters to see slide decks and Zoom calls through the HUD.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Custom QPainter Visual Widgets -->
+    <section class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">03 // UI DESIGN</span>
+            <h2 class="section-title">HUD Custom Widgets</h2>
+            <p class="rail-desc">Custom QPainter telemetry gauges engineered from first principles.</p>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            Rather than standard stock widgets, the overlay features custom vector widgets implemented in <code>hud/overlay.py</code>:
+          </p>
+
+          <div class="point-card">
+            <span class="point-title">1. Circular StabilityGauge with Harmonic Glow</span>
+            <p class="point-desc">
+              Renders a 270-degree circular arc ($120 \times 120$ px) measuring overall presenter stability. Implements smooth velocity interpolation:
+              <code>self.value += (self.target_value - self.value) * 0.1</code>. When high kinesic entropy or wrist fidgeting is detected, the gauge transitions from calm cyan to pulsing red with an alpha breathing cycle ($150 + 105 \sin(\text{phase})$).
+            </p>
+          </div>
+
+          <div class="point-card">
+            <span class="point-title">2. 2D Radar GazeTracker &amp; Confidence Gate</span>
+            <p class="point-desc">
+              Maps head yaw and pitch into a normalized radar reticle. When head pose drifts beyond calibrated thresholds, surfaces a prominent <code>"WARN: HOLD"</code> confidence gate warning the presenter to re-engage with the camera lens.
+            </p>
+          </div>
+
+          <div class="point-card">
+            <span class="point-title">3. Animated Probe Notifications</span>
+            <p class="point-desc">
+              When speech stall detection triggers, prompts fade smoothly into the HUD via a sinusoidal alpha ramp and automatically dismiss once verbal cadence resumes.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: CV & Kinesic Signal Processing -->
+    <section class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">04 // COMPUTER VISION</span>
+            <h2 class="section-title">Signal Processing</h2>
+            <p class="rail-desc">Positional variance, iris tracking, and kinesic entropy estimation.</p>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <div class="point-card">
+            <span class="point-title">Temporal Variance Fidget Detection (`fidget_detector.py`)</span>
+            <p class="point-desc">
+              Computes 3D coordinates for left wrist (index 15) and right wrist (index 16) from MediaPipe Pose. Coordinates are pushed into a 30-frame circular buffer ($\sim 1.0\text{s}$ at 30 FPS) with a 5-frame moving average smoothing buffer. Positional variance is calculated across the sliding window:
+            </p>
+          </div>
+
+          <div class="tech-code-box">
+<pre>/* Wrist Variance Detection Logic */
+var_left = np.var(left_wrist_buffer, axis=0).sum()
+var_right = np.var(right_wrist_buffer, axis=0).sum()
+is_fidgeting = (var_left > threshold) or (var_right > threshold)</pre>
+          </div>
+
+          <div class="point-card">
+            <span class="point-title">Iris Gaze &amp; Perspective-n-Point (PnP) Head Pose</span>
+            <p class="point-desc">
+              Utilizes 468 3D landmarks from MediaPipe Face Mesh. Computes the geometric ratio between iris centroids and eye corner bounds alongside 3D head pose orientation (pitch, yaw, roll) via the Perspective-n-Point algorithm.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Audio VAD & Groq Stall Injection -->
+    <section class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">05 // SPEECH & AI</span>
+            <h2 class="section-title">Cognitive Stall AI</h2>
+            <p class="rail-desc">Detecting presentation silence and streaming real-time coaching questions.</p>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            The audio subsystem buffers live microphone frames into WebRTC Voice Activity Detection (VAD). When verbal activity transitions into sustained silence exceeding the calibrated stall threshold ($>2.5\text{s}$), Lumina activates its real-time probe engine:
+          </p>
+
+          <div class="tech-code-box">
+<pre>- WebRTC VAD: Classifies 20ms audio frames into speech vs. silence.
+- Stall Detection: Accumulates contiguous non-speech frames; triggers stall event at 2.5s.
+- Groq Llama Streaming: Asynchronously transmits presentation script context and recent speech to Groq.
+- Sub-500ms Latency: Synthesizes live audience-style follow-up questions or transition cues.
+- Real-Time Script Tracking: Uses pdfplumber to parse slide notes and highlight progress.</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: Mission Control GUI Launcher -->
+    <section class="section reveal-on-scroll">
+      <div class="container editorial-layout">
+        <aside class="rail-left">
+          <div class="sticky-rail">
+            <span class="section-index">06 // TOOLING</span>
+            <h2 class="section-title">Mission Control</h2>
+            <p class="rail-desc">20KB desktop launcher providing terminal-free calibration and control.</p>
+          </div>
+        </aside>
+
+        <div class="content-right" style="max-width: var(--max-w-prose); display:flex; flex-direction:column; gap:var(--space-4);">
+          <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;">
+            To make Lumina immediately usable for non-technical presenters, I co-developed <code>launcher.py</code>, a dark-themed desktop mission control application featuring:
+          </p>
+
+          <div class="siris-points-grid" style="grid-template-columns: 1fr 1fr; margin-top:var(--space-2);">
+            <div class="point-card">
+              <span class="point-title">Camera Feed Preview</span>
+              <p class="point-desc">
+                Live OpenCV video window with device index selector and real-time FPS readout to verify lighting and camera positioning.
+              </p>
+            </div>
+            <div class="point-card">
+              <span class="point-title">Microphone Diagnostics</span>
+              <p class="point-desc">
+                Interactive audio dialog with live RMS volume meter and VAD sensitivity calibration to eliminate background air-conditioning noise.
+              </p>
+            </div>
+            <div class="point-card">
+              <span class="point-title">Script Parser &amp; Uploader</span>
+              <p class="point-desc">
+                Drag-and-drop ingestion of presentation scripts in PDF or TXT format via <code>pdfplumber</code>, parsing text into cue cards.
+              </p>
+            </div>
+            <div class="point-card">
+              <span class="point-title">One-Click Calibration</span>
+              <p class="point-desc">
+                5-second resting baseline routine capturing the presenter's natural posture and neutral camera gaze angle before launching.
+              </p>
+            </div>
+          </div>
+
+          <div style="padding-top: var(--space-4); border-top: 1px solid var(--border-hairline); display:flex; align-items:center; gap:var(--space-4); flex-wrap:wrap;">
+            <a href="https://github.com/DhruvKithany/Lumina-Presenter" target="_blank" rel="noopener noreferrer" class="btn-primary">
+              <span>View Lumina on GitHub</span>
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+            <a href="../index.html#projects" class="btn-secondary">
+              <span>Back to Portfolio</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>Dhruv Kithany · B.S. May 2028 · University of Wisconsin-Madison</div>
+      <div class="footer-links">
+        <a href="mailto:kithany@wisc.edu" class="footer-link">kithany@wisc.edu</a>
+        <a href="https://github.com/dhruvkithany" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub ↗</a>
+        <a href="https://linkedin.com/in/dhruvkithany" target="_blank" rel="noopener noreferrer" class="footer-link">LinkedIn ↗</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js?v=7.0"></script>
+</body>
+</html>
