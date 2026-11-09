@@ -446,19 +446,52 @@ def build_home():
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dhruv Kithany · Systems &amp; Machine Learning Engineering</title>
-  <meta name="description" content="Undergraduate researcher at UW–Madison building multi-agent systems, neural signal processing pipelines, and low-level runtime engines.">
+  <title>Dhruv Kithany | Systems &amp; Machine Learning Engineering</title>
+  <meta name="description" content="Dhruv Kithany is an Undergraduate Researcher at UW–Madison building multi-agent systems, neural signal processing pipelines, and machine learning architectures.">
   <link rel="canonical" href="https://dhruvkithany.github.io/">
+
+  <!-- Structured Data: Google Schema.org Person Graph -->
+  <script type="application/ld+json">
+  {{
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Dhruv Kithany",
+    "url": "https://dhruvkithany.github.io/",
+    "sameAs": [
+      "https://www.linkedin.com/in/dhruvkithany",
+      "https://github.com/dhruvkithany"
+    ],
+    "jobTitle": "Undergraduate Researcher & Machine Learning Engineer",
+    "worksFor": {{
+      "@type": "Organization",
+      "name": "University of Wisconsin-Madison",
+      "url": "https://www.wisc.edu"
+    }},
+    "alumniOf": {{
+      "@type": "Organization",
+      "name": "University of Wisconsin-Madison"
+    }},
+    "knowsAbout": [
+      "Machine Learning",
+      "Multi-Agent Systems",
+      "Retrieval-Augmented Generation",
+      "Neural Signal Processing",
+      "Low-Level Systems",
+      "C/C++",
+      "Python"
+    ]
+  }}
+  </script>
 
   <!-- Open Graph / Twitter -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Dhruv Kithany · Systems &amp; Machine Learning Engineering">
-  <meta property="og:description" content="Undergraduate researcher at UW–Madison building multi-agent systems, neural signal processing pipelines, and low-level runtime engines.">
+  <meta property="og:title" content="Dhruv Kithany | Systems &amp; Machine Learning Engineering">
+  <meta property="og:description" content="Dhruv Kithany is an Undergraduate Researcher at UW–Madison building multi-agent systems, neural signal processing pipelines, and machine learning architectures.">
   <meta property="og:url" content="https://dhruvkithany.github.io/">
   <meta property="og:image" content="https://dhruvkithany.github.io/assets/images/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Dhruv Kithany · Systems &amp; Machine Learning Engineering">
-  <meta name="twitter:description" content="Undergraduate researcher at UW–Madison building multi-agent systems, neural signal processing pipelines, and low-level runtime engines.">
+  <meta name="twitter:title" content="Dhruv Kithany | Systems &amp; Machine Learning Engineering">
+  <meta name="twitter:description" content="Dhruv Kithany is an Undergraduate Researcher at UW–Madison building multi-agent systems, neural signal processing pipelines, and machine learning architectures.">
   <meta name="twitter:image" content="https://dhruvkithany.github.io/assets/images/og-image.png">
 
   <!-- Typography & Assets -->
@@ -594,6 +627,26 @@ def build_experience_page():
   <title>Experience &amp; Research Appointments · Dhruv Kithany</title>
   <meta name="description" content="Professional enterprise software engineering and academic machine learning research appointments by Dhruv Kithany.">
   <link rel="canonical" href="https://dhruvkithany.github.io/experience.html">
+
+  <!-- Structured Data: Google Schema.org Person Graph -->
+  <script type="application/ld+json">
+  {{
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Dhruv Kithany",
+    "url": "https://dhruvkithany.github.io/",
+    "sameAs": [
+      "https://www.linkedin.com/in/dhruvkithany",
+      "https://github.com/dhruvkithany"
+    ],
+    "jobTitle": "Undergraduate Researcher & Machine Learning Engineer",
+    "worksFor": {{
+      "@type": "Organization",
+      "name": "University of Wisconsin-Madison",
+      "url": "https://www.wisc.edu"
+    }}
+  }}
+  </script>
 
   <meta property="og:type" content="website">
   <meta property="og:title" content="Experience &amp; Research Appointments · Dhruv Kithany">
