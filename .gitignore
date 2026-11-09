@@ -16,7 +16,7 @@ Info_Dump.txt
 *.env
 *.env.*
 
-# Resumes, Reports & LaTeX sources
+# Resumes, Reports & LaTeX sources (served via interactive site)
 *.pdf
 *.tex
 *.aux
@@ -26,22 +26,6 @@ Info_Dump.txt
 *.fls
 *.fdb_latexmk
 *.synctex.gz
-
-# Hidden personal writing archives
-content/
-writing/
-writing.html
-
-# Local build generators & shared modules (GitHub Pages serves static HTML only)
-build_site.py
-build_writing.py
-shared_components.py
-make_clean_commits.py
-
-# Unused root metadata
-robots.txt
-favicon.ico
-sitemap.xml
 
 # Test runners, QA suites & Reports
 reports/
@@ -55,3 +39,4 @@ package-lock.json
 __pycache__/
 *.py[cod]
 *$py.class
+make_clean_commits.py
