@@ -559,344 +559,28 @@ a:hover {
 .role-entry,
 .system-spread,
 .writing-row {
-  --reach: 1;
-  position: relative;
-}
-
-.role-entry::before,
-.system-spread::before,
-.writing-row::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: var(--border-hairline-strong);
-  transform: scaleX(var(--reach, 1));
-  transform-origin: left;
-  pointer-events: none;
-}
-
-.role-entry.is-arrived::before,
-.role-entry[data-reached="true"]::before,
-.system-spread[data-reached="true"]::before,
-.writing-row[data-reached="true"]::before {
-  transform: scaleX(var(--reach, 1));
-}
-
-/* Tabular figures and zero-shift layout for stat rows */
-.stat-row,
-.role-telemetry {
-  font-variant-numeric: tabular-nums;
-  opacity: 1;
-  transform: none;
-  transition: none;
-}
-
-.stat-row strong,
-.role-telemetry strong {
-  font-variant-numeric: tabular-nums;
-  display: inline-block;
-  white-space: nowrap;
-}
-
-.role-entry .stat-row,
-.role-entry .role-telemetry {
-  opacity: 1;
-  transform: none;
-  transition: none;
-}
-
-.role-header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-4);
-  margin-bottom: var(--space-3);
-  max-width: 100%;
-}
-
-.role-title-group {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-3);
-  flex-wrap: wrap;
-}
-
-.role-title {
-  font-family: var(--font-serif);
-  font-size: 28px;
-  font-weight: 400;
-  color: var(--text-primary);
-  line-height: 1.2;
-  transition: color 0.2s ease;
-}
-
-.role-entry:hover .role-title {
-  color: var(--pulse-blue);
-}
-
-.role-org {
-  font-family: var(--font-sans);
-  font-size: var(--text-base);
-  color: var(--text-secondary);
-}
-
-.role-meta {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  color: var(--text-muted);
-  letter-spacing: 0.04em;
-}
-
-.role-telemetry, .stat-row {
-  font-family: var(--font-sans);
-  font-size: 14.5px;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: var(--space-4);
-  letter-spacing: normal;
-  text-transform: none;
-}
-
-/* Handled by zero-shift tabular stats */
-
-.role-telemetry span, .stat-row span {
-  color: var(--text-muted);
-  margin: 0 var(--space-2);
-}
-
-.role-body {
-  color: var(--text-secondary);
-  font-size: 15.5px;
-  line-height: 1.68;
-  max-width: 70ch;
-}
-
-.demo-label {
-  font-family: var(--font-sans);
-  font-size: 13.5px;
-  font-weight: 500;
-  color: var(--pulse-blue);
-  margin-bottom: var(--space-3);
-}
-
-.role-body p {
-  margin-bottom: var(--space-3);
-}
-
-.role-body p:last-child {
-  margin-bottom: 0;
-}
-
-.role-link-out {
-  display: inline-block;
-  margin-top: var(--space-3);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  color: var(--pulse-ice);
-  border-bottom: 1px solid var(--border-hairline-strong);
-  padding-bottom: 1px;
-}
-
-.role-link-out:hover {
-  color: var(--pulse-blue);
-  border-color: var(--pulse-blue);
-}
-
-/* ==========================================================================
-   SECTION 02: ENGINEERED SYSTEMS (OPEN ARCHITECTURAL SPREADS)
-   ========================================================================== */
-.systems-stream {
-  display: flex;
-  flex-direction: column;
-}
-
-.system-spread {
-  border-top: 1px solid var(--border-hairline);
-  padding: 64px 0;
-  display: flex;
-  gap: var(--space-12);
-  align-items: flex-start;
-}
-
-@media (max-width: 900px) {
-  .system-spread {
-    flex-direction: column;
-    gap: var(--space-8);
-  }
-}
-
-.system-left {
-  width: 45%;
-  flex-shrink: 0;
-}
-
-@media (max-width: 900px) {
-  .system-left {
-    width: 100%;
-  }
-}
-
-.system-title {
-  font-family: var(--font-serif);
-  font-size: 32px;
-  font-weight: 400;
-  color: var(--text-primary);
-  line-height: 1.15;
-  margin-bottom: var(--space-2);
-}
-
-.system-stack {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  color: var(--pulse-blue);
-  letter-spacing: 0.04em;
-  margin-bottom: var(--space-4);
-}
-
-.system-narrative {
-  color: var(--text-secondary);
-  font-size: 15.5px;
-  line-height: 1.68;
-  max-width: 70ch;
-  margin-bottom: var(--space-4);
-}
-
-.system-metrics-plain {
-  font-family: var(--font-sans);
-  font-size: 14.5px;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: var(--space-4);
-}
-
-.system-metrics-plain strong {
-  color: var(--text-primary);
-  font-weight: 500;
-}
-
-.system-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-4);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-}
-
-.system-action-link {
-  color: var(--pulse-ice);
-  border-bottom: 1px solid var(--border-hairline-strong);
-  padding-bottom: 1px;
-}
-
-.system-action-link:hover {
-  color: var(--pulse-blue);
-  border-color: var(--pulse-blue);
-}
-
-/* System Right Column: Borderless Tab Switcher */
-.system-right {
-  width: 55%;
-  flex-grow: 1;
-  min-width: 0;
-}
-
-@media (max-width: 900px) {
-  .system-right {
-    width: 100%;
-  }
-}
-
-.borderless-tabs {
-  display: flex;
-  gap: var(--space-6);
-  border-bottom: 1px solid var(--border-hairline);
-  margin-bottom: var(--space-4);
-}
-
-.borderless-tab-btn {
-  background: none;
-  border: none;
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  color: var(--text-muted);
-  padding-bottom: var(--space-2);
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: color 0.15s ease, border-color 0.15s ease;
-}
-
-.borderless-tab-btn:hover {
-  color: var(--text-secondary);
-}
-
-.borderless-tab-btn.active {
-  color: var(--text-primary);
-  border-bottom-color: var(--pulse-ice);
-}
-
-.borderless-tab-panel {
-  display: none;
-}
-
-.borderless-tab-panel.active {
-  display: block;
-}
-
-.open-spec-view {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  line-height: 1.6;
-  color: var(--text-secondary);
-  overflow-x: auto;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-.open-spec-view .hl-val {
-  color: var(--pulse-ice);
-}
-
-.open-spec-view .hl-key {
-  color: var(--text-muted);
-}
-
-.open-spec-view .hl-ok {
-  color: var(--accent-emerald);
-}
-
-/* ==========================================================================
-   SECTION 03: WRITING & EPISTEMICS (OPEN LITERARY INDEX)
-   ========================================================================== */
-.writing-stream {
-  display: flex;
-  flex-direction: column;
-}
-
-.writing-row {
   border-top: 1px solid var(--border-hairline);
   padding: 36px 0;
   display: grid;
-  grid-template-columns: minmax(200px, max-content) minmax(220px, 1.1fr) minmax(280px, 1.8fr);
-  gap: clamp(1.75rem, 3vw, 3rem);
+  grid-template-columns: 200px minmax(300px, 1.1fr) minmax(320px, 1.5fr);
+  gap: clamp(2rem, 3vw, 3rem);
   align-items: baseline;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .writing-row {
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
+    padding: 28px 0;
   }
-}
-
-@media (max-width: 900px) {
-  .writing-row {
-    flex-direction: column;
-    gap: var(--space-3);
+  .writing-col-meta,
+  .writing-col-title,
+  .writing-col-content {
+    width: 100%;
+  }
+  .writing-col-content {
+    margin-top: var(--space-2);
   }
 }
 
@@ -913,44 +597,36 @@ a:hover {
   gap: var(--space-2);
 }
 
-@media (max-width: 900px) {
-  .writing-col-meta {
-    width: 100%;
-  }
-}
-
 .writing-col-title {
   width: auto;
 }
 
-@media (max-width: 900px) {
-  .writing-col-title {
-    width: 100%;
-  }
-}
-
 .writing-book-title {
   font-family: var(--font-serif);
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 400;
   color: var(--text-primary);
-  line-height: 1.2;
+  line-height: 1.25;
+  word-spacing: 0.1em;
+  letter-spacing: 0.01em;
 }
 
 .writing-book-author {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   color: var(--text-muted);
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 .writing-verdict {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: var(--text-sm);
+  font-size: 1.15rem;
   color: var(--text-secondary);
-  line-height: 1.4;
-  margin-top: var(--space-2);
+  line-height: 1.6;
+  word-spacing: 0.22em;
+  letter-spacing: 0.015em;
+  margin-top: var(--space-3);
 }
 
 .writing-verdict-author {
@@ -963,15 +639,9 @@ a:hover {
 
 .writing-col-content {
   width: auto;
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   color: var(--text-secondary);
-  line-height: 1.6;
-}
-
-@media (max-width: 900px) {
-  .writing-col-content {
-    width: 100%;
-  }
+  line-height: 1.65;
 }
 
 .writing-passage {
