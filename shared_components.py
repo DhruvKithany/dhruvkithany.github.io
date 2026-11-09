@@ -9,7 +9,7 @@ def get_shared_nav(prefix=""):
       <a href="{prefix}index.html#work" class="nav-link">Work</a>
       <a href="{prefix}experience.html" class="nav-link">Experience</a>
       <a href="{prefix}writing.html" class="nav-link">Writing</a>
-      <a href="{prefix}experience.html" class="nav-resume">Resume ↗</a>
+      <a href="{prefix}Dhruv_Kithany_Resume__Website_.pdf" class="nav-resume" target="_blank" rel="noopener noreferrer">Resume ↗</a>
     </nav>"""
 
 def get_shared_controls():
@@ -49,7 +49,7 @@ def get_shared_modal(prefix=""):
             <a href="{prefix}index.html#skills" class="jump-link">Technical Skills</a>
             <a href="{prefix}writing.html" class="jump-link">Writing Hub</a>
             <a href="{prefix}index.html#contact" class="jump-link">Contact</a>
-            <a href="{prefix}experience.html" class="jump-link">Resume &rarr;</a>
+            <a href="{prefix}Dhruv_Kithany_Resume__Website_.pdf" class="jump-link" target="_blank" rel="noopener noreferrer">Resume (PDF) ↗</a>
           </div>
         </div>
         <div class="jump-group" style="margin-top: 1.5rem;">
@@ -78,7 +78,7 @@ def get_shared_footer(prefix=""):
         <a href="{prefix}index.html#work" class="footer-link">Work</a>
         <a href="{prefix}experience.html" class="footer-link">Experience</a>
         <a href="{prefix}writing.html" class="footer-link">Writing</a>
-        <a href="{prefix}experience.html" class="footer-link">Resume</a>
+        <a href="{prefix}Dhruv_Kithany_Resume__Website_.pdf" class="footer-link" target="_blank" rel="noopener noreferrer">Resume (PDF)</a>
         <a href="mailto:kithany@wisc.edu" class="footer-link">Email</a>
         <a href="https://github.com/dhruvkithany" class="footer-link" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
         <a href="https://linkedin.com/in/dhruvkithany" class="footer-link" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>

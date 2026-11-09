@@ -16,8 +16,9 @@ Info_Dump.txt
 *.env
 *.env.*
 
-# Resumes, Reports & LaTeX sources (served via interactive site)
+# Resumes, Reports & LaTeX sources
 *.pdf
+!Dhruv_Kithany_Resume__Website_.pdf
 *.tex
 *.aux
 *.log
