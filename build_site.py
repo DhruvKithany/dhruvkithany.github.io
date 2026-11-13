@@ -184,11 +184,11 @@ def build_home():
             <!-- 5. WISCURDS -->
             <div class="compact-exp-item">
               <div class="compact-exp-header">
-                <div class="compact-exp-role">Undergraduate Researcher</div>
+                <div class="compact-exp-role"><span class="neural-anchor" data-node-id="exp-wiscurds" data-layer="2" data-section="compute" data-date="Nov 2025 – Present"></span>Undergraduate Researcher &amp; Chief Data Manager</div>
                 <div class="compact-exp-dates">Nov 2025 – Present</div>
               </div>
               <div class="compact-exp-org">Wisconsin Undergraduate Research in Data Science (WISCURDS, Advisor: Dr. Adam Ross Nelson) · Madison, WI</div>
-              <p class="compact-exp-line">Analyzing 133,000+ data cells across 66+ datasets to evaluate LLMs as synthetic human proxies.</p>
+              <p class="compact-exp-line">Chief Data Manager &amp; Principal Architect of data flows for SurveyResponder; built automated cleansing, NaN audits, and inventory pipelines across 133,000+ data cells.</p>
             </div>
 
             <!-- 6. Federated Hermes Shadow -->
