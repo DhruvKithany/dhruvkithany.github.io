@@ -22,6 +22,7 @@ project_contributions.md
 
 # Resumes, Reports & LaTeX sources
 *.pdf
+!Dhruv_Kithany_Resume__Website.pdf
 !Dhruv_Kithany_Resume__Website_.pdf
 *.tex
 *.aux
